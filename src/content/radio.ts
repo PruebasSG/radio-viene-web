@@ -28,7 +28,7 @@ export const radio = {
    * Ejemplo: "584121234567". Mientras esté vacío, los botones de WhatsApp
    * se muestran como "muy pronto".
    */
-  whatsapp: "",
+  whatsapp: "584126909569",
 
   /** Correo de contacto. Déjalo vacío para no mostrarlo. */
   correo: "",
