@@ -1,0 +1,64 @@
+.cabecera {
+  background: var(--azul-noche);
+  color: var(--sobre-oscuro);
+  border-bottom: 1px solid rgb(244 246 250 / 10%);
+}
+
+.interior {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 2rem;
+  padding-block: 1rem;
+}
+
+.marca {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  text-decoration: none;
+}
+
+.marcaNombre {
+  font-family: var(--fuente-titulos);
+  font-size: 1.35rem;
+  font-weight: 650;
+}
+
+.marcaFrecuencia {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--dorado);
+}
+
+.menu {
+  list-style: none;
+  margin: 0 calc(var(--margen) * -1);
+  padding: 0 var(--margen);
+  display: flex;
+  gap: 0.25rem 1.5rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+@media (min-width: 52rem) {
+  .menu {
+    margin: 0;
+    padding: 0;
+  }
+}
+
+.menu a {
+  display: block;
+  padding-block: 0.4rem;
+  font-size: 1rem;
+  white-space: nowrap;
+  text-decoration: none;
+  color: var(--sobre-oscuro-suave);
+  transition: color 150ms ease;
+}
+
+.menu a:hover {
+  color: var(--dorado-claro);
+}
