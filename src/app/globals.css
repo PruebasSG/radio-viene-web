@@ -52,6 +52,8 @@ html {
 
 body {
   margin: 0;
+  /* Red de seguridad: nada puede ensanchar la página más que la pantalla */
+  overflow-x: clip;
   font-family: var(--fuente-texto);
   font-size: 1.125rem;
   line-height: 1.6;
@@ -110,7 +112,9 @@ button {
   width: 100%;
   max-width: var(--ancho);
   margin-inline: auto;
-  padding-inline: var(--margen);
+  /* Respeta la muesca del iPhone cuando se gira en horizontal */
+  padding-left: max(var(--margen), env(safe-area-inset-left, 0px));
+  padding-right: max(var(--margen), env(safe-area-inset-right, 0px));
 }
 
 /* Texto solo para lectores de pantalla */
