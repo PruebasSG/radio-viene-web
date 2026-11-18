@@ -31,6 +31,18 @@
   }
 }
 
+.firma {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.logo {
+  flex: none;
+  width: auto;
+  height: 4.5rem;
+}
+
 .nombre {
   font-family: var(--fuente-titulos);
   font-size: 2rem;
@@ -89,4 +101,9 @@
 .final p {
   padding-block: 1.5rem;
   border-top: 1px solid rgb(244 246 250 / 12%);
+}
+
+/* Un número de teléfono nunca se parte en dos líneas */
+.sinCortes {
+  white-space: nowrap;
 }

@@ -84,7 +84,7 @@
 
 .programa[data-al-aire] {
   border-left-color: var(--dorado);
-  background: linear-gradient(to right, rgb(201 162 74 / 10%), transparent 60%);
+  background: linear-gradient(to right, rgb(227 162 28 / 10%), transparent 60%);
 }
 
 .horario {

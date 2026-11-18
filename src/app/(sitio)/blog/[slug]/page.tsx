@@ -6,7 +6,7 @@ import { ContenidoArticulo, textoPlano } from "@/components/blog/ContenidoArticu
 import { TarjetaArticulo } from "@/components/blog/TarjetaArticulo";
 import estilos from "@/components/blog/blog.module.css";
 import { BotonEscuchar } from "@/components/reproductor/BotonEscuchar";
-import { SITE_URL } from "@/config/emisora";
+import { IMAGEN_COMPARTIR, SITE_URL } from "@/config/emisora";
 import { radio } from "@/content/radio";
 import {
   fechaLegible,
@@ -39,16 +39,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!articulo) return { title: "Artículo no encontrado" };
 
   const ruta = `/blog/${articulo.slug}`;
+  // Sin foto de portada, el artículo se comparte con la imagen de la radio.
   const imagen = articulo.portadaUrl
-    ? [
-        {
-          url: articulo.portadaUrl,
-          width: articulo.portadaAncho ?? undefined,
-          height: articulo.portadaAlto ?? undefined,
-          alt: articulo.portadaAlt,
-        },
-      ]
-    : undefined;
+    ? {
+        url: articulo.portadaUrl,
+        width: articulo.portadaAncho ?? undefined,
+        height: articulo.portadaAlto ?? undefined,
+        alt: articulo.portadaAlt,
+      }
+    : IMAGEN_COMPARTIR;
 
   return {
     title: articulo.titulo,
@@ -59,13 +58,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       url: ruta,
       title: articulo.titulo,
       description: descripcion(articulo),
-      images: imagen,
+      images: [imagen],
       publishedTime: articulo.publicadoEn ?? undefined,
       modifiedTime: articulo.actualizadoEn,
       section: articulo.categoria,
       authors: articulo.autor ? [articulo.autor] : undefined,
     },
-    twitter: { card: imagen ? "summary_large_image" : "summary" },
+    twitter: { card: "summary_large_image" },
   };
 }
 
@@ -75,7 +74,7 @@ function datosEstructurados(articulo: Articulo, url: string) {
     "@type": "Organization",
     name: `${radio.nombre} ${radio.frecuencia} ${radio.banda}`,
     url: SITE_URL,
-    logo: { "@type": "ImageObject", url: `${SITE_URL}/icon.svg` },
+    logo: { "@type": "ImageObject", url: `${SITE_URL}/iconos/icono-512.png`, width: 512, height: 512 },
   };
   return {
     "@context": "https://schema.org",

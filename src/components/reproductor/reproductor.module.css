@@ -20,7 +20,7 @@
   border-radius: 50%;
   background: var(--dorado);
   color: var(--azul-noche);
-  box-shadow: 0 0 0 0 rgb(201 162 74 / 0%);
+  box-shadow: 0 0 0 0 rgb(227 162 28 / 0%);
   transition:
     transform 160ms ease,
     background-color 160ms ease,
@@ -36,7 +36,7 @@
 }
 
 .boton[data-estado="sonando"] .circulo {
-  box-shadow: 0 0 0 10px rgb(201 162 74 / 18%);
+  box-shadow: 0 0 0 10px rgb(227 162 28 / 18%);
 }
 
 .icono {
@@ -105,7 +105,7 @@
 }
 
 .boton[data-tamano="chico"][data-estado="sonando"] .circulo {
-  box-shadow: 0 0 0 5px rgb(201 162 74 / 20%);
+  box-shadow: 0 0 0 5px rgb(227 162 28 / 20%);
 }
 
 /* ---------- Barra fija inferior ---------- */
@@ -121,7 +121,7 @@
   padding-bottom: env(safe-area-inset-bottom, 0px);
   background: var(--azul-noche);
   color: var(--sobre-oscuro);
-  border-top: 1px solid rgb(201 162 74 / 35%);
+  border-top: 1px solid rgb(227 162 28 / 35%);
   animation: aparecer 260ms ease-out;
 }
 

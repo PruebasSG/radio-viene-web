@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { Logo } from "@/components/Logo";
 import { BotonEscuchar } from "@/components/reproductor/BotonEscuchar";
 import { useReproductor } from "@/components/reproductor/ReproductorProvider";
 import { radio } from "@/content/radio";
@@ -71,6 +72,7 @@ export function Cabecera() {
     <header className={estilos.cabecera} data-compacta={compacta || menuAbierto || undefined}>
       <div className={`contenedor ${estilos.interior}`}>
         <Link href="/" className={estilos.marca} onClick={() => setMenuAbierto(false)}>
+          <Logo alto={40} className={estilos.marcaLogo} prioritario />
           <span className={estilos.marcaNombre}>{radio.nombre}</span>
           <span className={estilos.marcaFrecuencia}>
             {radio.frecuencia} {radio.banda}

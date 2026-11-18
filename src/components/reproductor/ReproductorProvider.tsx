@@ -148,7 +148,10 @@ export function ReproductorProvider({ children }: { children: React.ReactNode })
       title: cancion ? cancion.titulo : `${radio.nombre} en vivo`,
       artist: cancion?.artista ?? `${radio.nombre} ${radio.frecuencia} ${radio.banda}`,
       album: `${radio.nombre} ${radio.frecuencia} ${radio.banda}`,
-      artwork: [{ src: "/icon.svg", sizes: "any", type: "image/svg+xml" }],
+      artwork: [
+        { src: "/iconos/icono-192.png", sizes: "192x192", type: "image/png" },
+        { src: "/iconos/icono-512.png", sizes: "512x512", type: "image/png" },
+      ],
     });
     sesion.setActionHandler("play", reproducir);
     sesion.setActionHandler("pause", detener);

@@ -35,6 +35,12 @@
   text-decoration: none;
 }
 
+.marcaLogo {
+  align-self: center;
+  width: auto;
+  height: 1.9rem;
+}
+
 .marca span {
   font-family: var(--fuente-texto);
   font-size: 0.9rem;
@@ -524,6 +530,13 @@ textarea.entrada {
   padding: clamp(1.5rem, 5vw, 2.25rem);
   border-radius: var(--radio-grande);
   background: var(--blanco);
+}
+
+.ingresoLogo {
+  display: block;
+  width: auto;
+  height: 5.25rem;
+  margin-bottom: 1rem;
 }
 
 .ingresoMarca {

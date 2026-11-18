@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
+import { Logo } from "@/components/Logo";
 import { Aviso } from "@/components/admin/Aviso";
 import { FormIngreso } from "@/components/admin/FormIngreso";
 import estilos from "@/components/admin/panel.module.css";
@@ -15,6 +16,7 @@ export default async function PaginaIngreso() {
   return (
     <main className={estilos.ingreso}>
       <div className={estilos.ingresoTarjeta}>
+        <Logo alto={84} className={estilos.ingresoLogo} prioritario />
         <h1 className={estilos.ingresoMarca}>
           {radio.nombre}
           <span>Panel</span>

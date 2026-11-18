@@ -47,7 +47,7 @@
   color: var(--azul-noche);
   font-weight: 700;
   text-decoration: none;
-  box-shadow: 0 0 0 0 rgb(201 162 74 / 40%);
+  box-shadow: 0 0 0 0 rgb(227 162 28 / 40%);
   transition:
     background-color 150ms ease,
     transform 150ms ease,
@@ -57,7 +57,7 @@
 .boton:hover {
   background: var(--dorado-claro);
   transform: translateY(-2px);
-  box-shadow: 0 0 0 8px rgb(201 162 74 / 18%);
+  box-shadow: 0 0 0 8px rgb(227 162 28 / 18%);
 }
 
 .icono {

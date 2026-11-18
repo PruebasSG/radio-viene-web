@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Logo } from "@/components/Logo";
 import { BotonEscuchar } from "@/components/reproductor/BotonEscuchar";
 import { radio, type Ajustes } from "@/content/radio";
 import { enlaceWhatsApp, numeroLegible } from "@/lib/whatsapp";
@@ -19,9 +20,12 @@ export function Pie({ ajustes }: { ajustes: Ajustes }) {
     <footer className={estilos.pie}>
       <div className={`contenedor ${estilos.rejilla}`}>
         <div className={estilos.marca}>
-          <p className={estilos.nombre}>
-            {radio.nombre} <span>{radio.frecuencia} {radio.banda}</span>
-          </p>
+          <div className={estilos.firma}>
+            <Logo alto={72} className={estilos.logo} />
+            <p className={estilos.nombre}>
+              {radio.nombre} <span>{radio.frecuencia} {radio.banda}</span>
+            </p>
+          </div>
           <p className={estilos.descripcion}>{ajustes.descripcion}</p>
           <div className={estilos.escuchar}>
             <BotonEscuchar tamano="chico" />
@@ -50,7 +54,7 @@ export function Pie({ ajustes }: { ajustes: Ajustes }) {
             {whatsapp && (
               <li>
                 <a href={whatsapp} target="_blank" rel="noopener noreferrer">
-                  WhatsApp {numeroLegible(ajustes.whatsapp)}
+                  WhatsApp <span className={estilos.sinCortes}>{numeroLegible(ajustes.whatsapp)}</span>
                 </a>
               </li>
             )}

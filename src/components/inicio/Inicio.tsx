@@ -1,3 +1,4 @@
+import { Logo } from "@/components/Logo";
 import { BotonEscuchar } from "@/components/reproductor/BotonEscuchar";
 import { radio } from "@/content/radio";
 import { AhoraYDespues } from "./AhoraYDespues";
@@ -10,6 +11,7 @@ export function Inicio({ lema }: { lema: string }) {
     <section id="inicio" className={estilos.inicio} aria-labelledby="titulo-inicio">
       <div className={`contenedor ${estilos.rejilla}`}>
         <div className={estilos.presentacion}>
+          <Logo alto={136} className={estilos.logo} prioritario />
           <h1 id="titulo-inicio" className={estilos.titulo}>
             {radio.nombre}
             <span className="solo-lectores">

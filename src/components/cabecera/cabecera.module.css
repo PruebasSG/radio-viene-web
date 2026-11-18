@@ -15,7 +15,7 @@
 
 .cabecera[data-compacta] {
   background: rgb(14 33 64 / 92%);
-  border-bottom-color: rgb(201 162 74 / 25%);
+  border-bottom-color: rgb(227 162 28 / 25%);
   box-shadow: 0 6px 24px rgb(5 14 30 / 25%);
   -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
@@ -40,6 +40,17 @@
   margin-right: auto;
   white-space: nowrap;
   text-decoration: none;
+}
+
+.marcaLogo {
+  align-self: center;
+  width: auto;
+  height: 2.5rem;
+  transition: height 250ms ease;
+}
+
+.cabecera[data-compacta] .marcaLogo {
+  height: 2.1rem;
 }
 
 .marcaNombre {

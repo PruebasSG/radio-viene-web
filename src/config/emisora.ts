@@ -13,6 +13,14 @@ export const STREAM_URL = process.env.NEXT_PUBLIC_STREAM_URL || STREAM_POR_DEFEC
 /** API de AzuraCast con el estado de la emisora. Solo se consulta desde el servidor. */
 export const AHORA_SUENA_URL = process.env.AZURACAST_NOWPLAYING_URL || AHORA_SUENA_POR_DEFECTO;
 
+/** Imagen general para compartir (src/app/opengraph-image.png), cuando una página no tiene una propia. */
+export const IMAGEN_COMPARTIR = {
+  url: "/opengraph-image.png",
+  width: 1200,
+  height: 630,
+  alt: "Radio Viene 101.3 FM: música, Biblia y esperanza para cada día.",
+};
+
 /** Dirección pública de la web, usada en los enlaces al compartir. */
 export const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ||
