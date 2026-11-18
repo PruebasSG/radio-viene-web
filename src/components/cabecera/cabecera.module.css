@@ -13,6 +13,11 @@
     box-shadow 250ms ease;
 }
 
+/* Sobre el mosaico de la portada: sin fondo */
+.cabecera[data-transparente] {
+  background: transparent;
+}
+
 .cabecera[data-compacta] {
   background: rgb(14 33 64 / 92%);
   border-bottom-color: rgb(227 162 28 / 25%);
@@ -120,21 +125,9 @@
   gap: 0.75rem;
 }
 
-/* Oculto no ocupa lugar; al aparecer, entra con un pequeño salto */
+/* El botón claro de «Escuchar» solo en pantallas anchas: en el móvil está la barra inferior */
 .escuchar {
   display: none;
-}
-
-.escuchar[data-visible] {
-  display: flex;
-  animation: asomar 220ms ease-out;
-}
-
-@keyframes asomar {
-  from {
-    opacity: 0;
-    transform: translateY(-6px) scale(0.9);
-  }
 }
 
 .botonMenu {
@@ -233,6 +226,10 @@
 @media (min-width: 60rem) {
   .navEscritorio {
     display: block;
+  }
+
+  .escuchar {
+    display: flex;
   }
 
   .botonMenu,

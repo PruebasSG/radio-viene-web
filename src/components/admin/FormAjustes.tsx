@@ -8,7 +8,7 @@ import { numeroLegible } from "@/lib/whatsapp";
 import { Aviso } from "./Aviso";
 import estilos from "./panel.module.css";
 
-export function FormAjustes({ ajustes }: { ajustes: Ajustes }) {
+export function FormAjustes({ ajustes, conPortada }: { ajustes: Ajustes; conPortada: boolean }) {
   const [estado, enviar, enviando] = useActionState(guardarAjustes, ESTADO_INICIAL);
 
   const anterior = estado.valores as Record<string, string> | undefined;
@@ -28,6 +28,65 @@ export function FormAjustes({ ajustes }: { ajustes: Ajustes }) {
     >
       {estado.mensaje && <Aviso tipo={estado.ok ? "exito" : "error"}>{estado.mensaje}</Aviso>}
 
+      <input type="hidden" name="conPortada" value={conPortada ? "1" : "0"} />
+      {conPortada && (
+        <fieldset className={`${estilos.campo} ${estilos.publicacion}`}>
+          <legend className={estilos.etiqueta}>Titular de la portada</legend>
+          <p className={estilos.ayuda}>
+            Es la frase grande del inicio. La segunda parte aparece en dorado, subrayada. Por ejemplo:
+            «Esperanza que» + «se escucha.»
+          </p>
+          <div className={estilos.dosColumnas}>
+            <div className={estilos.campo}>
+              <label htmlFor="titular" className={estilos.etiqueta}>
+                Comienzo
+              </label>
+              <input
+                id="titular"
+                name="titular"
+                className={estilos.entrada}
+                maxLength={40}
+                defaultValue={anterior?.titular ?? ajustes.titular}
+                aria-invalid={Boolean(error("titular"))}
+              />
+              {error("titular") && <p className={estilos.error}>{error("titular")}</p>}
+            </div>
+            <div className={estilos.campo}>
+              <label htmlFor="titularDestacado" className={estilos.etiqueta}>
+                Parte destacada
+              </label>
+              <input
+                id="titularDestacado"
+                name="titularDestacado"
+                className={estilos.entrada}
+                maxLength={40}
+                defaultValue={anterior?.titularDestacado ?? ajustes.titularDestacado}
+                aria-invalid={Boolean(error("titularDestacado"))}
+              />
+              {error("titularDestacado") && <p className={estilos.error}>{error("titularDestacado")}</p>}
+            </div>
+          </div>
+          <div className={estilos.campo}>
+            <label htmlFor="frases" className={estilos.etiqueta}>
+              Frases de la cinta dorada
+            </label>
+            <textarea
+              id="frases"
+              name="frases"
+              className={estilos.entrada}
+              rows={5}
+              defaultValue={anterior?.frases ?? ajustes.frases.join("\n")}
+              aria-invalid={Boolean(error("frases"))}
+              aria-describedby="ayuda-frases"
+            />
+            <p id="ayuda-frases" className={estilos.ayuda}>
+              Una frase por línea, hasta 8. Se desplazan sin parar debajo del inicio.
+            </p>
+            {error("frases") && <p className={estilos.error}>{error("frases")}</p>}
+          </div>
+        </fieldset>
+      )}
+
       <div className={estilos.campo}>
         <label htmlFor="lema" className={estilos.etiqueta}>
           Lema
@@ -42,7 +101,7 @@ export function FormAjustes({ ajustes }: { ajustes: Ajustes }) {
           aria-describedby="ayuda-lema"
         />
         <p id="ayuda-lema" className={estilos.ayuda}>
-          La frase que aparece bajo el nombre de la radio, al inicio de la web.
+          La frase que aparece debajo del titular, al inicio de la web.
         </p>
         {error("lema") && <p className={estilos.error}>{error("lema")}</p>}
       </div>

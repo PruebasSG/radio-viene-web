@@ -1,84 +1,349 @@
-/* ===================== Inicio ===================== */
+/* =========================================================
+   Inicio: mosaico de fotos en movimiento, titular y señal en vivo
+   ========================================================= */
 
 .inicio {
+  position: relative;
+  isolation: isolate;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   gap: clamp(2.5rem, 6vw, 4rem);
-  padding-block: clamp(2rem, 6vw, 4.5rem) clamp(2rem, 5vw, 3rem);
+  /* Sube por debajo de la cabecera transparente */
+  margin-top: calc(-4.5rem - env(safe-area-inset-top, 0px));
+  padding-top: calc(4.5rem + env(safe-area-inset-top, 0px) + clamp(2.5rem, 7vw, 5rem));
+  padding-bottom: clamp(1.5rem, 4vw, 2.5rem);
   background: var(--azul-noche);
   color: var(--sobre-oscuro);
   overflow: hidden;
 }
 
-/* En pantallas grandes, el inicio ocupa la primera pantalla completa */
 @media (min-width: 60rem) and (min-height: 40rem) {
   .inicio {
-    min-height: calc(100svh - 4.5rem - env(safe-area-inset-top, 0px));
+    min-height: calc(100svh - var(--alto-barra));
   }
 }
 
-.rejilla {
+/* ---------- Mosaico ---------- */
+
+.mosaico {
+  position: absolute;
+  z-index: -2;
+  inset: -12% -18% -12% -10%;
   display: grid;
-  gap: 2.5rem;
-  align-items: center;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.9rem;
+  transform: rotate(-7deg);
+  opacity: 0.32;
+  pointer-events: none;
 }
 
 @media (min-width: 60rem) {
-  .rejilla {
-    grid-template-columns: minmax(0, 1.25fr) minmax(20rem, 0.9fr);
-    gap: clamp(3rem, 6vw, 6rem);
+  .mosaico {
+    inset: -18% -6% -18% 46%;
+    gap: 1.1rem;
+    opacity: 1;
   }
 }
 
-.presentacion {
+.columna {
+  min-width: 0;
+}
+
+.columna:nth-child(2) {
+  margin-top: -18%;
+}
+
+/* Cada columna repite su contenido dos veces: al llegar a la mitad, vuelve al comienzo sin que se note */
+.pista {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  padding-bottom: 0.9rem;
+}
+
+/*
+ * El mosaico solo se mueve en pantallas anchas. En el móvil se ve muy tenue
+ * detrás del texto: quieto ahorra batería sin perder el efecto.
+ * Empieza a moverse cuando la página ya cargó, para no competir con la carga.
+ */
+@media (min-width: 60rem) {
+  .pista {
+    will-change: transform;
+    animation: subir 80s linear 2.5s infinite both;
+  }
+
+  /* La columna central baja y las otras suben, cada una a su ritmo */
+  .columna:nth-child(2) .pista {
+    animation-name: bajar;
+    animation-duration: 95s;
+  }
+
+  .columna:nth-child(3) .pista {
+    animation-duration: 88s;
+  }
+}
+
+/* Fuera de la vista, el movimiento se detiene (ver PausaFueraDeVista) */
+[data-pausado] .pista,
+[data-pausado] .cintaPista {
+  animation-play-state: paused;
+}
+
+
+@keyframes subir {
+  to {
+    transform: translateY(-50%);
+  }
+}
+
+@keyframes bajar {
+  from {
+    transform: translateY(-50%);
+  }
+
+  to {
+    transform: translateY(0);
+  }
+}
+
+.pieza {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radio-grande);
+  background: var(--azul-noche-2);
+}
+
+.pieza img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Tarjetas de diseño (mientras no haya fotos suficientes) */
+.pieza[data-tarjeta] {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  padding: clamp(0.9rem, 2vw, 1.4rem);
+  border: 1px solid rgb(244 246 250 / 8%);
+}
+
+.pieza[data-tarjeta]:nth-of-type(odd) {
+  background: var(--azul);
+}
+
+.piezaIcono {
+  width: clamp(1.6rem, 3vw, 2.2rem);
+  height: clamp(1.6rem, 3vw, 2.2rem);
+  color: var(--dorado);
+}
+
+.piezaTexto {
+  font-family: var(--fuente-titulos);
+  font-size: clamp(0.95rem, 1.6vw, 1.25rem);
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.piezaFrecuencia {
+  font-family: var(--fuente-titulos);
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 650;
+  line-height: 1;
+  color: var(--dorado);
+}
+
+/* Velo azul: garantiza que el texto se lea sobre cualquier foto */
+.velo {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background:
+    linear-gradient(to top, var(--azul-noche) 0%, rgb(14 33 64 / 0%) 30%),
+    linear-gradient(to bottom, rgb(14 33 64 / 75%) 0%, rgb(14 33 64 / 0%) 22%),
+    rgb(14 33 64 / 72%);
+}
+
+@media (min-width: 60rem) {
+  .velo {
+    background:
+      linear-gradient(to top, var(--azul-noche) 0%, rgb(14 33 64 / 0%) 26%),
+      linear-gradient(to bottom, rgb(14 33 64 / 70%) 0%, rgb(14 33 64 / 0%) 20%),
+      linear-gradient(
+        to right,
+        var(--azul-noche) 0%,
+        var(--azul-noche) 40%,
+        rgb(14 33 64 / 70%) 52%,
+        rgb(14 33 64 / 15%) 72%,
+        rgb(14 33 64 / 0%) 100%
+      );
+  }
+}
+
+/* ---------- Texto ---------- */
+
+.contenido {
   display: grid;
   justify-items: start;
+  align-content: center;
+  flex: 1;
 }
 
-.logo {
-  width: auto;
-  height: clamp(5rem, 11vw, 8.5rem);
-  margin-bottom: clamp(1rem, 2.5vw, 1.5rem);
-  filter: drop-shadow(0 10px 28px rgb(227 162 28 / 22%));
-  animation: entrar 900ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+.contenido > * {
+  max-width: 40rem;
 }
 
-.titulo {
-  font-size: clamp(3.6rem, 13vw, 8.5rem);
+.contenido > .titular {
+  max-width: none;
+}
+
+.estado {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem 0.5rem;
+  padding: 0.4rem 0.9rem;
+  border: 1px solid rgb(244 246 250 / 18%);
+  border-radius: 999px;
+  background: rgb(14 33 64 / 55%);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  animation: entrar 800ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.estado strong {
+  color: var(--dorado);
+}
+
+.estadoPunto {
+  position: relative;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  background: var(--dorado);
+  opacity: 0.6;
+}
+
+.estado[data-en-linea] .estadoPunto {
+  background: #e5483b;
+  opacity: 1;
+}
+
+/* Onda que sale del punto: se anima con transform y opacity, que mueve la tarjeta gráfica sin cargar al procesador */
+.estado[data-en-linea] .estadoPunto::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: #e5483b;
+  animation: senal 1.8s ease-out infinite;
+}
+
+@keyframes senal {
+  from {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+
+  to {
+    opacity: 0;
+    transform: scale(2.8);
+  }
+}
+
+.titular {
+  margin-top: clamp(1.1rem, 3vw, 1.6rem);
+  font-size: clamp(2.9rem, 7vw, 6rem);
   font-weight: 650;
-  line-height: 0.92;
-  letter-spacing: -0.035em;
+  line-height: 1.02;
+  letter-spacing: -0.03em;
   font-variation-settings: "opsz" 72;
   animation: entrar 900ms cubic-bezier(0.2, 0.7, 0.2, 1) 80ms both;
 }
 
-.lema {
-  margin-top: 1.25rem;
-  max-width: 28ch;
-  font-size: clamp(1.2rem, 2.4vw, 1.5rem);
-  color: var(--sobre-oscuro-suave);
-  animation: entrar 900ms cubic-bezier(0.2, 0.7, 0.2, 1) 120ms both;
+.titularLinea {
+  display: block;
 }
 
-.control {
-  display: grid;
-  gap: 0.9rem;
-  justify-items: start;
-  max-width: 24rem;
-  margin-top: clamp(1.75rem, 4vw, 2.5rem);
-  animation: entrar 900ms cubic-bezier(0.2, 0.7, 0.2, 1) 240ms both;
+.destacado {
+  position: relative;
+  display: inline-block;
+  padding-right: 0.08em;
+  padding-bottom: 0.12em;
+  font-style: italic;
+  background: linear-gradient(100deg, var(--dorado) 10%, var(--dorado-claro) 60%, var(--dorado) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
-/* Al cargar, el título, el lema y el botón aparecen uno tras otro */
-@keyframes entrar {
-  from {
-    opacity: 0;
-    transform: translateY(18px);
+.subrayado {
+  position: absolute;
+  left: 0;
+  bottom: -0.12em;
+  width: 100%;
+  height: 0.28em;
+  overflow: visible;
+}
+
+.subrayado path {
+  fill: none;
+  stroke: var(--dorado);
+  stroke-width: 4;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: trazar 1.1s cubic-bezier(0.6, 0, 0.2, 1) 700ms forwards;
+}
+
+@keyframes trazar {
+  to {
+    stroke-dashoffset: 0;
   }
 }
 
+.lema {
+  margin-top: clamp(1.25rem, 3vw, 1.75rem);
+  max-width: 34ch;
+  font-size: clamp(1.15rem, 2.1vw, 1.4rem);
+  line-height: 1.5;
+  color: var(--sobre-oscuro-suave);
+  animation: entrar 900ms cubic-bezier(0.2, 0.7, 0.2, 1) 180ms both;
+}
+
+.botones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: clamp(1.75rem, 4vw, 2.25rem);
+  animation: entrar 900ms cubic-bezier(0.2, 0.7, 0.2, 1) 280ms both;
+}
+
+.botonSecundario {
+  display: inline-flex;
+  align-items: center;
+  min-height: 3.25rem;
+  padding: 0.75rem 1.5rem;
+  border: 1px solid rgb(244 246 250 / 35%);
+  border-radius: 999px;
+  font-weight: 600;
+  text-decoration: none;
+  transition:
+    background-color 150ms ease,
+    border-color 150ms ease;
+}
+
+.botonSecundario:hover {
+  border-color: var(--sobre-oscuro);
+  background: rgb(244 246 250 / 8%);
+}
+
 .mensaje {
+  margin-top: 0.9rem;
   min-height: 1.5em;
   font-size: 0.98rem;
   color: var(--dorado-claro);
@@ -86,115 +351,86 @@
 
 .mensaje:empty {
   min-height: 0;
+  margin-top: 0;
 }
 
-/* ===================== Tarjeta «Al aire» ===================== */
-
-.alAire {
-  display: grid;
-  gap: 0.6rem;
-  align-content: start;
-  min-height: 14rem;
-  padding: clamp(1.4rem, 3vw, 2rem);
-  border: 1px solid rgb(244 246 250 / 10%);
-  border-top: 3px solid var(--dorado);
-  border-radius: var(--radio-grande);
-  background: var(--azul-noche-2);
-  animation: entrar 900ms cubic-bezier(0.2, 0.7, 0.2, 1) 360ms both;
-}
-
-.alAireEstado {
+.cifras {
   display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: var(--dorado-claro);
+  flex-wrap: wrap;
+  gap: 1rem clamp(1.75rem, 4vw, 3rem);
+  margin: clamp(2rem, 5vw, 2.75rem) 0 0;
+  animation: entrar 900ms cubic-bezier(0.2, 0.7, 0.2, 1) 380ms both;
 }
 
-.alAirePrograma {
+.cifras div {
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.cifras dd {
+  margin: 0;
   font-family: var(--fuente-titulos);
   font-size: clamp(1.6rem, 3vw, 2.1rem);
-  font-weight: 600;
-  line-height: 1.15;
-  text-wrap: balance;
+  font-weight: 650;
+  line-height: 1.1;
 }
 
-.alAireDetalle {
+.cifras dt {
+  font-size: 0.9rem;
   color: var(--sobre-oscuro-suave);
 }
 
-.progreso {
-  display: grid;
-  gap: 0.45rem;
-  margin-top: 0.5rem;
+@keyframes entrar {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
 }
 
-.progresoBarra {
-  height: 6px;
-  border-radius: 999px;
-  background: rgb(244 246 250 / 12%);
+.pieInicio {
+  position: relative;
+}
+
+/* ===================== Cinta dorada ===================== */
+
+.cinta {
   overflow: hidden;
+  background: var(--dorado);
+  color: var(--azul-noche);
 }
 
-.progresoBarra span {
-  display: block;
-  height: 100%;
-  border-radius: inherit;
-  background: linear-gradient(to right, var(--dorado), var(--dorado-claro));
-  transition: width 1s ease;
-}
-
-.progresoTextos {
+.cintaPista {
   display: flex;
-  justify-content: space-between;
-  gap: 0.5rem;
-  font-size: 0.85rem;
-  font-variant-numeric: tabular-nums;
-  color: var(--sobre-oscuro-suave);
+  width: max-content;
+  animation: deslizar 60s linear 2.5s infinite both;
 }
 
-.progresoRestante {
-  color: var(--sobre-oscuro);
+.cinta:hover .cintaPista {
+  animation-play-state: paused;
+}
+
+@keyframes deslizar {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.cintaFrase {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 0.85rem 0 0.85rem 1.5rem;
+  font-family: var(--fuente-titulos);
+  font-size: clamp(1.05rem, 2vw, 1.3rem);
   font-weight: 600;
-}
-
-.cancion {
-  padding: 0.6rem 0.8rem;
-  border-radius: var(--radio-chico);
-  background: rgb(244 246 250 / 6%);
-  font-size: 0.95rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  font-style: italic;
   white-space: nowrap;
 }
 
-.cancion span {
-  color: var(--dorado);
-}
-
-.despues {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 0.2rem 0.5rem;
-  margin-top: 0.4rem;
-  padding-top: 0.9rem;
-  border-top: 1px solid rgb(244 246 250 / 10%);
-  font-size: 0.95rem;
-  color: var(--sobre-oscuro-suave);
-}
-
-.despues strong {
-  font-family: var(--fuente-titulos);
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--sobre-oscuro);
-}
-
-.oyentes {
-  font-size: 0.88rem;
-  color: var(--sobre-oscuro-suave);
+.cintaSeparador {
+  font-style: normal;
+  font-size: 0.8em;
+  opacity: 0.7;
 }
 
 /* ===================== Ecualizador ===================== */
@@ -208,38 +444,46 @@
 
 .ecualizador span {
   width: 3px;
-  height: 30%;
+  height: 100%;
   border-radius: 2px;
   background: var(--dorado);
-  transition: height 300ms ease;
+  /* Las barras crecen desde abajo con scaleY: lo anima la tarjeta gráfica, no el procesador */
+  transform: scaleY(0.3);
+  transform-origin: bottom;
+  transition: transform 300ms ease;
 }
 
 .ecualizador[data-activo] span {
   animation: rebotar 900ms ease-in-out infinite alternate;
 }
 
-.ecualizador[data-activo] span:nth-child(2) {
+.ecualizador[data-activo] span:nth-child(4n + 2) {
   animation-duration: 700ms;
   animation-delay: -200ms;
 }
 
-.ecualizador[data-activo] span:nth-child(3) {
+.ecualizador[data-activo] span:nth-child(4n + 3) {
   animation-duration: 1100ms;
   animation-delay: -400ms;
 }
 
-.ecualizador[data-activo] span:nth-child(4) {
+.ecualizador[data-activo] span:nth-child(4n) {
   animation-duration: 800ms;
   animation-delay: -600ms;
 }
 
+.ecualizador[data-activo] span:nth-child(5n) {
+  animation-duration: 1000ms;
+  animation-delay: -300ms;
+}
+
 @keyframes rebotar {
   from {
-    height: 20%;
+    transform: scaleY(0.2);
   }
 
   to {
-    height: 100%;
+    transform: scaleY(1);
   }
 }
 
@@ -375,19 +619,4 @@
   font-size: 0.85rem;
   font-weight: 600;
   letter-spacing: 0.04em;
-}
-
-/* Los horarios nunca se parten; en pantallas muy estrechas solo se muestra lo que falta */
-.progresoTextos span {
-  white-space: nowrap;
-}
-
-@media (max-width: 24rem) {
-  .progresoTextos {
-    justify-content: flex-start;
-  }
-
-  .progresoTextos span:not(.progresoRestante) {
-    display: none;
-  }
 }

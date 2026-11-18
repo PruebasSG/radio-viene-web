@@ -789,3 +789,97 @@ textarea.editorTexto {
     grid-template-columns: 1fr auto;
   }
 }
+
+/* ---------- Fotos ---------- */
+
+.subida {
+  display: grid;
+  justify-items: start;
+  gap: 0.75rem;
+}
+
+.fotos {
+  list-style: none;
+  margin: 1.25rem 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr));
+  gap: 1rem;
+}
+
+.foto {
+  display: grid;
+  align-content: start;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border: 1px solid var(--gris-linea);
+  border-radius: var(--radio-grande);
+  background: var(--blanco);
+  transition: opacity 200ms ease;
+}
+
+.foto[aria-busy="true"] {
+  opacity: 0.6;
+}
+
+.foto[data-oculta] .fotoImagen img {
+  opacity: 0.45;
+}
+
+.fotoImagen {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radio-chico);
+  overflow: hidden;
+  background: var(--gris-fondo);
+}
+
+.fotoImagen img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.fotoImagen .etiquetaOculto {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  margin: 0;
+}
+
+.fotoAcciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.fotoBoton {
+  min-height: 2.5rem;
+  min-width: 2.5rem;
+  padding: 0.3rem 0.75rem;
+  border: 1px solid var(--gris-linea);
+  border-radius: var(--radio-chico);
+  background: var(--blanco);
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.fotoBoton:hover:not(:disabled) {
+  border-color: var(--azul);
+}
+
+.fotoBoton:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.fotoEliminar {
+  margin-left: auto;
+  color: #b3261e;
+}
+
+@media (min-width: 64rem) {
+  .accesos[data-cuatro] {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

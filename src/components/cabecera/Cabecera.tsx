@@ -4,8 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Logo } from "@/components/Logo";
-import { BotonEscuchar } from "@/components/reproductor/BotonEscuchar";
-import { useReproductor } from "@/components/reproductor/ReproductorProvider";
+import { BotonPastilla } from "@/components/reproductor/BotonPastilla";
 import { radio } from "@/content/radio";
 import estilos from "./cabecera.module.css";
 
@@ -18,15 +17,12 @@ const ENLACES = [
 ];
 
 /**
- * Cabecera fija: amplia al comienzo de la página y compacta al bajar.
- * Si el botón grande de «Escuchar» ya no se ve, aparece uno pequeño aquí,
- * para que siempre se pueda poner la radio con un toque.
+ * Cabecera fija. En la portada empieza transparente, sobre el mosaico de fotos;
+ * al bajar (y en el resto de páginas) se vuelve sólida y compacta.
  */
 export function Cabecera() {
   const ruta = usePathname();
-  const { usado } = useReproductor();
   const [compacta, setCompacta] = useState(false);
-  const [controlVisible, setControlVisible] = useState(true);
   const [menuAbierto, setMenuAbierto] = useState(false);
 
   useEffect(() => {
@@ -44,18 +40,6 @@ export function Cabecera() {
     return () => window.removeEventListener("scroll", revisar);
   }, []);
 
-  // En la portada, vigila si el botón grande de «Escuchar» está a la vista.
-  const enPortada = ruta === "/";
-  useEffect(() => {
-    const control = document.getElementById("control-escucha");
-    if (!enPortada || !control) return;
-    const observador = new IntersectionObserver(([entrada]) => setControlVisible(entrada.isIntersecting), {
-      rootMargin: "-72px 0px 0px 0px",
-    });
-    observador.observe(control);
-    return () => observador.disconnect();
-  }, [enPortada]);
-
   // El menú del móvil se cierra con la tecla Escape.
   useEffect(() => {
     if (!menuAbierto) return;
@@ -66,10 +50,14 @@ export function Cabecera() {
     return () => window.removeEventListener("keydown", alPulsar);
   }, [menuAbierto]);
 
-  const mostrarEscuchar = !usado && !(enPortada && controlVisible);
+  const transparente = ruta === "/" && !compacta && !menuAbierto;
 
   return (
-    <header className={estilos.cabecera} data-compacta={compacta || menuAbierto || undefined}>
+    <header
+      className={estilos.cabecera}
+      data-compacta={compacta || menuAbierto || undefined}
+      data-transparente={transparente || undefined}
+    >
       <div className={`contenedor ${estilos.interior}`}>
         <Link href="/" className={estilos.marca} onClick={() => setMenuAbierto(false)}>
           <Logo alto={40} className={estilos.marcaLogo} prioritario />
@@ -90,8 +78,8 @@ export function Cabecera() {
         </nav>
 
         <div className={estilos.acciones}>
-          <div className={estilos.escuchar} data-visible={mostrarEscuchar || undefined}>
-            <BotonEscuchar tamano="mini" />
+          <div className={estilos.escuchar}>
+            <BotonPastilla variante="clara" />
           </div>
           <button
             type="button"
