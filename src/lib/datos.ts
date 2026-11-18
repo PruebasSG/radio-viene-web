@@ -63,25 +63,45 @@ function redesValidas(valor: unknown): RedSocial[] {
   );
 }
 
+const COLUMNAS_BASE = "lema, descripcion, whatsapp, correo, redes";
+const COLUMNAS_PORTADA = "titular, titular_destacado, frases";
+
+/** Si aún no se ejecutó fotos.sql, las columnas de la portada no existen: usamos las de respaldo. */
+const faltaColumna = (codigo?: string) => codigo === "42703" || codigo === "PGRST204";
+
+function frasesValidas(valor: unknown): string[] {
+  if (!Array.isArray(valor)) return ajustesRespaldo.frases;
+  return valor.filter((frase): frase is string => typeof frase === "string" && frase.trim() !== "");
+}
+
 export const obtenerAjustes = cache(async (): Promise<Ajustes> => {
   const supabase = crearClientePublico();
   if (!supabase) return ajustesRespaldo;
 
-  const { data, error } = await supabase
+  let respuesta = await supabase
     .from("ajustes")
-    .select("lema, descripcion, whatsapp, correo, redes")
+    .select(`${COLUMNAS_BASE}, ${COLUMNAS_PORTADA}`)
     .eq("id", 1)
     .maybeSingle();
+  if (faltaColumna(respuesta.error?.code)) {
+    respuesta = await supabase.from("ajustes").select(COLUMNAS_BASE).eq("id", 1).maybeSingle();
+  }
 
+  const { data, error } = respuesta;
   if (error || !data) {
     if (error) console.error("No se pudieron leer los datos de la radio:", error.message);
     return ajustesRespaldo;
   }
+  const fila = data as Record<string, unknown>;
   return {
-    lema: data.lema,
-    descripcion: data.descripcion,
-    whatsapp: data.whatsapp,
-    correo: data.correo,
-    redes: redesValidas(data.redes),
+    titular: typeof fila.titular === "string" ? fila.titular : ajustesRespaldo.titular,
+    titularDestacado:
+      typeof fila.titular_destacado === "string" ? fila.titular_destacado : ajustesRespaldo.titularDestacado,
+    frases: "frases" in fila ? frasesValidas(fila.frases) : ajustesRespaldo.frases,
+    lema: String(fila.lema),
+    descripcion: String(fila.descripcion),
+    whatsapp: String(fila.whatsapp),
+    correo: String(fila.correo),
+    redes: redesValidas(fila.redes),
   };
 });

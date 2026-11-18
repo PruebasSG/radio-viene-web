@@ -56,6 +56,29 @@ export const esquemaAjustes = z.object({
   >),
 });
 
+/** Textos de la portada (requieren haber ejecutado fotos.sql). */
+export const esquemaPortada = z.object({
+  titular: z.string().trim().min(1, "Escribe el comienzo del titular.").max(40, "Máximo 40 caracteres."),
+  titularDestacado: z
+    .string()
+    .trim()
+    .min(1, "Escribe la parte destacada del titular.")
+    .max(40, "Máximo 40 caracteres."),
+  frases: z
+    .string()
+    .transform((texto) =>
+      texto
+        .split("\n")
+        .map((linea) => linea.trim())
+        .filter(Boolean),
+    )
+    .pipe(
+      z
+        .array(z.string().max(60, "Cada frase puede tener hasta 60 caracteres."))
+        .max(8, "Escribe como máximo 8 frases."),
+    ),
+});
+
 export const esIdValido = (id: string) => z.uuid().safeParse(id).success;
 
 /** Convierte los errores de Zod en { campo: "mensaje" }. */

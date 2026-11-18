@@ -5,13 +5,15 @@
  */
 
 const LADO_MAXIMO = 1600;
+/** Tamaño de las miniaturas (mosaico, galerías): carga mucho más rápido. */
+export const LADO_MINI = 640;
 
 const aBlob = (lienzo: HTMLCanvasElement, tipo: string, calidad: number) =>
   new Promise<Blob | null>((resolver) => lienzo.toBlob(resolver, tipo, calidad));
 
 export type ImagenPreparada = { archivo: File; ancho: number; alto: number };
 
-export async function prepararImagen(original: File): Promise<ImagenPreparada> {
+export async function prepararImagen(original: File, ladoMaximo = LADO_MAXIMO): Promise<ImagenPreparada> {
   let mapa: ImageBitmap;
   try {
     mapa = await createImageBitmap(original);
@@ -19,7 +21,7 @@ export async function prepararImagen(original: File): Promise<ImagenPreparada> {
     throw new Error("No se pudo leer la imagen. Prueba con una foto JPG o PNG.");
   }
 
-  const escala = Math.min(1, LADO_MAXIMO / Math.max(mapa.width, mapa.height));
+  const escala = Math.min(1, ladoMaximo / Math.max(mapa.width, mapa.height));
   const ancho = Math.round(mapa.width * escala);
   const alto = Math.round(mapa.height * escala);
 

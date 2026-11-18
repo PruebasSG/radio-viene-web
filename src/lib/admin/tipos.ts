@@ -12,3 +12,6 @@ export const ESTADO_INICIAL: EstadoFormulario = {};
 
 /** Respuesta al subir una imagen del blog. */
 export type ResultadoImagen = { url: string } | { error: string };
+
+/** Respuesta de las acciones de fotos. */
+export type ResultadoFoto = { ok: true } | { error: string };

@@ -14,6 +14,11 @@ export type RedSocial = {
 };
 
 export type Ajustes = {
+  /** Titular de la portada, en dos partes: la segunda va destacada en dorado. */
+  titular: string;
+  titularDestacado: string;
+  /** Frases de la cinta dorada que se desplaza bajo la portada. */
+  frases: string[];
   lema: string;
   descripcion: string;
   /** Solo dígitos, con código de país. Vacío = sin WhatsApp. */
@@ -34,6 +39,9 @@ export const radio = {
 } as const;
 
 export const ajustesRespaldo: Ajustes = {
+  titular: "Esperanza que",
+  titularDestacado: "se escucha.",
+  frases: ["Música que edifica", "La Biblia para cada día", "Oramos contigo", "Esperanza para tu familia", "Jesús viene"],
   lema: "Música, Biblia y esperanza para cada día.",
   descripcion:
     "Somos una radio adventista del séptimo día. Te acompañamos con música cristiana, estudio de la Biblia y mensajes de esperanza para toda la familia.",
