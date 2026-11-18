@@ -546,3 +546,233 @@ textarea.entrada {
 .ingresoTarjeta .boton {
   width: 100%;
 }
+
+/* ---------- Blog: editor de artículos ---------- */
+
+.entradaTitulo {
+  font-family: var(--fuente-titulos);
+  font-size: 1.35rem;
+  font-weight: 600;
+}
+
+.prefijoCampo {
+  display: flex;
+  align-items: stretch;
+  border: 1px solid #c6ccd5;
+  border-radius: var(--radio-chico);
+  background: var(--gris-fondo);
+  overflow: hidden;
+}
+
+.prefijoCampo span {
+  display: flex;
+  align-items: center;
+  max-width: 45%;
+  padding: 0 0.6rem;
+  font-size: 0.9rem;
+  color: var(--gris);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.prefijoCampo .entrada {
+  min-width: 0;
+  border: 0;
+  border-left: 1px solid #c6ccd5;
+  border-radius: 0;
+}
+
+.editor {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.editorPestanas {
+  display: flex;
+  gap: 0.25rem;
+  border-bottom: 1px solid var(--gris-linea);
+}
+
+.editorPestanas button {
+  padding: 0.55rem 1rem;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  background: none;
+  font-weight: 600;
+  color: var(--gris);
+  cursor: pointer;
+}
+
+.editorPestanas button[aria-selected="true"] {
+  border-bottom-color: var(--dorado);
+  color: var(--tinta);
+}
+
+.editorBarra {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.editorBarra button {
+  min-width: 2.75rem;
+  min-height: 2.5rem;
+  padding: 0.3rem 0.75rem;
+  border: 1px solid var(--gris-linea);
+  border-radius: var(--radio-chico);
+  background: var(--blanco);
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.editorBarra button:hover {
+  border-color: var(--azul);
+}
+
+.editorBarra button[data-negrita] {
+  font-weight: 800;
+}
+
+.editorBarra button[data-cursiva] {
+  font-style: italic;
+  font-family: var(--fuente-titulos);
+}
+
+textarea.editorTexto {
+  min-height: 22rem;
+  line-height: 1.6;
+}
+
+.editorVista {
+  min-height: 22rem;
+  padding: 1.25rem;
+  border: 1px solid var(--gris-linea);
+  border-radius: var(--radio-chico);
+  background: var(--blanco);
+}
+
+.portadaVista {
+  max-width: 28rem;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radio-chico);
+  overflow: hidden;
+  background: var(--gris-fondo);
+}
+
+.portadaVista img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.botonClaro {
+  background: var(--azul-suave);
+  color: var(--azul);
+}
+
+.botonClaro:hover {
+  background: #cfdcef;
+}
+
+.google {
+  display: grid;
+  gap: 0.6rem;
+  padding: 1.25rem;
+  border-radius: var(--radio-grande);
+  background: var(--gris-fondo);
+}
+
+.googleTarjeta {
+  padding: 1rem 1.15rem;
+  border-radius: var(--radio-chico);
+  background: var(--blanco);
+  font-family: Arial, sans-serif;
+}
+
+.googleSitio {
+  font-size: 0.85rem;
+  color: #4d5156;
+  overflow-wrap: anywhere;
+}
+
+.googleTitulo {
+  margin-top: 0.2rem;
+  font-size: 1.2rem;
+  line-height: 1.3;
+  color: #1a0dab;
+}
+
+.googleTexto {
+  margin-top: 0.25rem;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: #4d5156;
+}
+
+.googleConsejos {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.92rem;
+  color: var(--gris);
+}
+
+.googleConsejos li::before {
+  content: "○ ";
+}
+
+.googleConsejos li[data-ok="true"]::before {
+  content: "✓ ";
+  color: #2f7d4f;
+  font-weight: 700;
+}
+
+.publicacion {
+  margin: 0;
+  padding: 1.25rem;
+  border: 1px solid var(--gris-linea);
+  border-radius: var(--radio-grande);
+}
+
+.publicacion legend {
+  padding-inline: 0.4rem;
+}
+
+.etiquetaEstado {
+  display: inline-block;
+  margin-left: 0.5rem;
+  padding: 0.05rem 0.55rem;
+  border-radius: 999px;
+  font-family: var(--fuente-texto);
+  font-size: 0.78rem;
+  font-weight: 700;
+  vertical-align: middle;
+}
+
+.etiquetaEstado[data-estado="borrador"] {
+  background: var(--gris-linea);
+  color: var(--gris);
+}
+
+.etiquetaEstado[data-estado="publicado"] {
+  background: #e5f3ea;
+  color: #2f7d4f;
+}
+
+.etiquetaEstado[data-estado="programado"] {
+  background: var(--azul-suave);
+  color: var(--azul);
+}
+
+@media (min-width: 64rem) {
+  .accesos[data-tres] {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 40rem) {
+  .filaBlog {
+    grid-template-columns: 1fr auto;
+  }
+}

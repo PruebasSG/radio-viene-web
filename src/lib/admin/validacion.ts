@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { CATEGORIAS_BLOG } from "@/content/blog";
 import { REDES_DISPONIBLES } from "@/content/radio";
 
 /**
@@ -65,4 +66,65 @@ export function erroresPorCampo(error: z.ZodError): Record<string, string> {
     errores[campo] ??= problema.message;
   }
   return errores;
+}
+
+// ---------- Blog ----------
+
+/** Direcciones que no puede usar un artículo porque ya las usa la web. */
+const SLUGS_RESERVADOS = ["pagina"];
+
+export const esquemaArticulo = z
+  .object({
+    titulo: z.string().trim().min(1, "Escribe el título.").max(120, "Máximo 120 caracteres."),
+    slug: z
+      .string()
+      .trim()
+      .min(1, "Escribe la dirección del artículo.")
+      .max(100, "Máximo 100 caracteres.")
+      .regex(/^[a-z0-9]+(-[a-z0-9]+)*$/, "Usa solo minúsculas sin tildes, números y guiones.")
+      .refine((slug) => !SLUGS_RESERVADOS.includes(slug), "Esa dirección está reservada. Elige otra."),
+    extracto: z.string().trim().max(300, "Máximo 300 caracteres."),
+    contenido: z.string().max(100_000, "El artículo es demasiado largo."),
+    categoria: z.enum(CATEGORIAS_BLOG, { message: "Elige una categoría." }),
+    autor: z.string().trim().max(80, "Máximo 80 caracteres."),
+    portadaUrl: z.string().trim().max(500),
+    portadaAncho: z.coerce.number().int().min(0).max(4000),
+    portadaAlto: z.coerce.number().int().min(0).max(4000),
+    portadaAlt: z.string().trim().max(200, "Máximo 200 caracteres."),
+    estado: z.enum(["borrador", "publicado"]),
+    publicadoEn: z
+      .string()
+      .trim()
+      .refine((valor) => valor === "" || !Number.isNaN(Date.parse(valor)), "Elige una fecha válida."),
+  })
+  .superRefine((datos, contexto) => {
+    if (datos.estado === "publicado") {
+      if (datos.extracto === "") {
+        contexto.addIssue({
+          code: "custom",
+          path: ["extracto"],
+          message: "Escribe un extracto antes de publicar: es el texto que muestra Google.",
+        });
+      }
+      if (datos.contenido.trim() === "") {
+        contexto.addIssue({ code: "custom", path: ["contenido"], message: "El artículo está vacío." });
+      }
+    }
+    if (datos.portadaUrl !== "" && datos.portadaAlt === "") {
+      contexto.addIssue({
+        code: "custom",
+        path: ["portadaAlt"],
+        message: "Describe la imagen en pocas palabras. Ayuda a Google y a las personas ciegas.",
+      });
+    }
+  });
+
+/** Comprueba por sus primeros bytes que el archivo de verdad es una imagen JPG, PNG o WebP. */
+export function esImagenReal(bytes: Uint8Array): boolean {
+  const empiezaCon = (...firma: number[]) => firma.every((byte, i) => bytes[i] === byte);
+  const jpg = empiezaCon(0xff, 0xd8, 0xff);
+  const png = empiezaCon(0x89, 0x50, 0x4e, 0x47);
+  const webp =
+    empiezaCon(0x52, 0x49, 0x46, 0x46) && bytes[8] === 0x57 && bytes[9] === 0x45 && bytes[10] === 0x42 && bytes[11] === 0x50;
+  return jpg || png || webp;
 }

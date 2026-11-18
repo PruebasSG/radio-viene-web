@@ -7,6 +7,7 @@ import estilos from "./panel.module.css";
 const SECCIONES = [
   { href: "/admin", texto: "Inicio" },
   { href: "/admin/programacion", texto: "Programación" },
+  { href: "/admin/blog", texto: "Blog" },
   { href: "/admin/datos", texto: "Datos de la radio" },
 ];
 

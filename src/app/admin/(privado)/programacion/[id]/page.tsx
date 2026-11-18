@@ -69,7 +69,11 @@ export default async function EditarPrograma({ params, searchParams }: Props) {
         <p className={estilos.intro} style={{ marginBottom: "1rem" }}>
           Si solo quieres quitarlo por un tiempo, mejor desmarca «Mostrar en la web».
         </p>
-        <BotonEliminar accion={eliminarPrograma.bind(null, id)} nombre={programa.nombre} />
+        <BotonEliminar
+          accion={eliminarPrograma.bind(null, id)}
+          etiqueta="Eliminar programa"
+          confirmacion={`¿Eliminar «${programa.nombre}» de la programación? Esta acción no se puede deshacer.`}
+        />
       </div>
     </>
   );

@@ -9,3 +9,6 @@ export type EstadoFormulario = {
 };
 
 export const ESTADO_INICIAL: EstadoFormulario = {};
+
+/** Respuesta al subir una imagen del blog. */
+export type ResultadoImagen = { url: string } | { error: string };

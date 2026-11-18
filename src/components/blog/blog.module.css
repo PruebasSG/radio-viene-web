@@ -1,0 +1,374 @@
+/* ---------- Encabezado del blog ---------- */
+
+.cabecera {
+  padding-block: clamp(2.5rem, 7vw, 4.5rem) clamp(2rem, 5vw, 3rem);
+  background: var(--azul-noche);
+  color: var(--sobre-oscuro);
+}
+
+.cabecera h1 {
+  font-size: clamp(2.6rem, 8vw, 4.5rem);
+  letter-spacing: -0.03em;
+  font-variation-settings: "opsz" 72;
+}
+
+.cabecera p {
+  margin-top: 0.75rem;
+  max-width: 46ch;
+  font-size: 1.2rem;
+  color: var(--sobre-oscuro-suave);
+}
+
+.listado {
+  padding-block: clamp(2.5rem, 6vw, 4rem) var(--seccion);
+}
+
+.vacio {
+  color: var(--gris);
+}
+
+/* ---------- Rejilla de tarjetas ---------- */
+
+.rejilla {
+  display: grid;
+  gap: 2.5rem 2rem;
+}
+
+@media (min-width: 40rem) {
+  .rejilla {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 64rem) {
+  .rejilla {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.tarjeta {
+  min-width: 0;
+}
+
+.tarjetaEnlace {
+  display: grid;
+  gap: 1rem;
+  text-decoration: none;
+}
+
+.tarjetaImagen {
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: var(--radio-grande);
+  background: var(--azul-noche);
+}
+
+.tarjetaImagen img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 400ms ease;
+}
+
+.tarjetaEnlace:hover .tarjetaImagen img {
+  transform: scale(1.03);
+}
+
+.tarjetaSinImagen {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  padding: 1rem;
+  border-bottom: 3px solid var(--dorado);
+  font-family: var(--fuente-titulos);
+  font-size: 1.4rem;
+  font-weight: 600;
+  text-align: center;
+  color: var(--sobre-oscuro);
+}
+
+.tarjetaTexto {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.categoria {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--azul);
+}
+
+.tarjetaTitulo {
+  font-size: 1.4rem;
+  line-height: 1.25;
+  transition: color 150ms ease;
+}
+
+.tarjetaEnlace:hover .tarjetaTitulo {
+  color: var(--azul);
+}
+
+.tarjetaExtracto {
+  color: var(--gris);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.fecha {
+  font-size: 0.92rem;
+  color: var(--gris);
+}
+
+/* El primer artículo de la portada del blog ocupa todo el ancho */
+@media (min-width: 52rem) {
+  .tarjeta[data-destacado] {
+    grid-column: 1 / -1;
+  }
+
+  .tarjeta[data-destacado] .tarjetaEnlace {
+    grid-template-columns: 1.3fr 1fr;
+    align-items: center;
+    gap: 2.5rem;
+  }
+
+  .tarjeta[data-destacado] .tarjetaTitulo {
+    font-size: clamp(1.9rem, 3vw, 2.5rem);
+  }
+}
+
+/* ---------- Paginación ---------- */
+
+.paginacion {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 3.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--gris-linea);
+}
+
+.paginacion a {
+  font-weight: 600;
+  color: var(--azul);
+  text-underline-offset: 3px;
+}
+
+/* ---------- Sección en la portada de la web ---------- */
+
+.seccionPortada {
+  padding-block: var(--seccion);
+  background: var(--gris-fondo);
+}
+
+.encabezadoPortada {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem 2rem;
+  margin-bottom: 2rem;
+}
+
+.verTodo {
+  font-weight: 600;
+  color: var(--azul);
+  text-underline-offset: 3px;
+}
+
+/* ---------- Artículo ---------- */
+
+.articulo {
+  padding-block: clamp(2rem, 6vw, 3.5rem) var(--seccion);
+}
+
+.migas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  font-size: 0.95rem;
+  color: var(--gris);
+}
+
+.migas a {
+  color: var(--azul);
+  font-weight: 600;
+  text-underline-offset: 3px;
+}
+
+.columna {
+  max-width: 44rem;
+  margin-inline: auto;
+}
+
+.titulo {
+  margin-top: 1rem;
+  font-size: clamp(2.2rem, 6vw, 3.5rem);
+  letter-spacing: -0.025em;
+  font-variation-settings: "opsz" 60;
+}
+
+.entradilla {
+  margin-top: 1rem;
+  font-size: clamp(1.2rem, 2.4vw, 1.4rem);
+  line-height: 1.5;
+  color: var(--gris);
+}
+
+.meta {
+  margin-top: 1.25rem;
+  font-size: 0.98rem;
+  color: var(--gris);
+}
+
+.portada {
+  max-width: 60rem;
+  margin: clamp(2rem, 5vw, 3rem) auto 0;
+}
+
+.portada img {
+  width: 100%;
+  height: auto;
+  border-radius: var(--radio-grande);
+}
+
+.cuerpo {
+  margin-top: clamp(2rem, 5vw, 3rem);
+}
+
+/* Tipografía para leer cómodo: renglones cortos y espacio generoso */
+.prosa {
+  font-size: 1.2rem;
+  line-height: 1.75;
+}
+
+.prosa > * + * {
+  margin-top: 1.25em;
+}
+
+.prosa h2 {
+  margin-top: 2em;
+  font-size: 1.75rem;
+}
+
+.prosa h3 {
+  margin-top: 1.75em;
+  font-size: 1.35rem;
+}
+
+.prosa a {
+  color: var(--azul);
+  text-underline-offset: 3px;
+}
+
+.prosa ul,
+.prosa ol {
+  padding-left: 1.4em;
+}
+
+.prosa li + li {
+  margin-top: 0.4em;
+}
+
+.prosa blockquote {
+  margin-inline: 0;
+  padding: 0.25em 0 0.25em 1.25em;
+  border-left: 3px solid var(--dorado);
+  font-family: var(--fuente-titulos);
+  font-size: 1.3rem;
+  font-style: italic;
+  color: var(--tinta);
+}
+
+.prosa img {
+  width: 100%;
+  height: auto;
+  border-radius: var(--radio-chico);
+}
+
+.prosa hr {
+  border: 0;
+  border-top: 1px solid var(--gris-linea);
+  margin-block: 2.5em;
+}
+
+/* ---------- Compartir y llamada a escuchar ---------- */
+
+.compartir {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--gris-linea);
+}
+
+.compartirTitulo {
+  font-weight: 600;
+}
+
+.compartirBotones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 0.9rem;
+}
+
+.compartirBoton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.9rem;
+  padding: 0.55rem 1.2rem;
+  border: 1px solid var(--gris-linea);
+  border-radius: 999px;
+  background: var(--blanco);
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.compartirBoton:hover {
+  border-color: var(--azul);
+}
+
+.compartirWhatsApp {
+  border-color: #1f8f4e;
+  background: #1f8f4e;
+  color: var(--blanco);
+}
+
+.compartirWhatsApp:hover {
+  border-color: #17733e;
+  background: #17733e;
+}
+
+.compartirIcono {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.escuchar {
+  display: grid;
+  gap: 1rem;
+  margin-top: 3rem;
+  padding: clamp(1.5rem, 4vw, 2rem);
+  border-radius: var(--radio-grande);
+  background: var(--azul-noche);
+  color: var(--sobre-oscuro);
+}
+
+.escuchar p {
+  font-family: var(--fuente-titulos);
+  font-size: 1.35rem;
+  font-weight: 600;
+}
+
+.relacionados {
+  padding-block: var(--seccion);
+  background: var(--gris-fondo);
+}
+
+.relacionados h2 {
+  margin-bottom: 2rem;
+}

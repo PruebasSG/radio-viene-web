@@ -10,6 +10,8 @@ administrativo conectado a [Supabase](https://supabase.com).
 
 - **Programación:** crear, editar, ocultar y eliminar programas. El panel avisa
   si dos programas se cruzan de horario.
+- **Blog:** escribir, programar y publicar artículos con imagen de portada,
+  vista previa del texto y vista previa de cómo se verán en Google.
 - **Datos de la radio:** lema, texto de presentación, WhatsApp, correo y redes.
 
 Los cambios se ven en la web en unos segundos.
@@ -21,12 +23,23 @@ Los cambios se ven en la web en unos segundos.
 | `src/content/radio.ts` | Nombre, frecuencia, ubicación, zona horaria y textos de respaldo |
 | `src/content/programacion.ts` | Programación de respaldo (si la base de datos no responde) |
 | `src/content/categorias.ts` | Las secciones del contenido a la carta |
+| `src/content/blog.ts` | Las categorías del blog |
 
 ## Base de datos
 
-El archivo `supabase/esquema.sql` crea todas las tablas, las reglas de seguridad
-y los datos iniciales. Se ejecuta completo en Supabase → SQL Editor. Al final del
-archivo están las instrucciones para dar o quitar acceso a un administrador.
+Los archivos de `supabase/` se ejecutan completos, en este orden, en
+Supabase → SQL Editor:
+
+1. `esquema.sql`: administradores, programación y datos de la radio. Al final
+   están las instrucciones para dar o quitar acceso a un administrador.
+2. `blog.sql`: artículos y carpeta de imágenes del blog.
+
+## SEO del blog
+
+- Cada artículo tiene título y descripción propios, dirección canónica, imagen
+  para compartir y datos estructurados `BlogPosting` para Google.
+- `/sitemap.xml` se genera solo con todos los artículos publicados.
+- Las imágenes se reducen en el navegador antes de subirse (máx. 1600 px, WebP).
 
 ## Seguridad
 
@@ -40,6 +53,8 @@ archivo están las instrucciones para dar o quitar acceso a un administrador.
   página y cada acción vuelve a verificar que la persona es administradora.
 - **Validación en dos capas:** en el servidor (`src/lib/admin/validacion.ts`) y
   con restricciones en la propia base de datos.
+- **Blog seguro:** el texto de los artículos no admite HTML ni código, y las
+  imágenes se comprueban por su contenido real, no solo por su nombre.
 - **La web nunca se cae por el panel:** si Supabase no responde, la web pública
   usa el contenido de respaldo.
 - Cabeceras de seguridad en `next.config.ts` y versiones de dependencias fijadas.
@@ -49,7 +64,7 @@ archivo están las instrucciones para dar o quitar acceso a un administrador.
 ```
 src/
   app/
-    (sitio)/      Web pública (con el reproductor)
+    (sitio)/      Web pública (con el reproductor) y blog
     admin/        Panel administrativo
     api/ahora/    Estado de la emisora (consulta AzuraCast)
   components/     Secciones de la web y del panel
@@ -58,7 +73,8 @@ src/
   lib/            Datos, horarios, sesión y validación
   proxy.ts        Protección de las rutas del panel
 supabase/
-  esquema.sql     Base de datos completa
+  esquema.sql     Base de datos del panel
+  blog.sql        Base de datos del blog
 ```
 
 ## Variables de entorno

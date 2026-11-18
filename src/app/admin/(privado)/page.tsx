@@ -7,10 +7,15 @@ export const metadata: Metadata = { title: "Inicio" };
 
 export default async function InicioPanel() {
   const { supabase, email } = await exigirAdmin();
-  const { data: programas } = await supabase.from("programas").select("activo");
+  const [{ data: programas }, { data: articulos }] = await Promise.all([
+    supabase.from("programas").select("activo"),
+    supabase.from("articulos").select("estado"),
+  ]);
 
   const visibles = programas?.filter((p) => p.activo).length ?? 0;
   const ocultos = (programas?.length ?? 0) - visibles;
+  const publicados = articulos?.filter((a) => a.estado === "publicado").length ?? 0;
+  const borradores = (articulos?.length ?? 0) - publicados;
 
   return (
     <>
@@ -21,7 +26,7 @@ export default async function InicioPanel() {
         </div>
       </div>
 
-      <div className={estilos.accesos}>
+      <div className={estilos.accesos} data-tres>
         <Link href="/admin/programacion" className={estilos.acceso}>
           <h2>Programación</h2>
           <p>
@@ -30,6 +35,15 @@ export default async function InicioPanel() {
             oculta programas.
           </p>
           <span className={estilos.accesoIr}>Editar programación →</span>
+        </Link>
+        <Link href="/admin/blog" className={estilos.acceso}>
+          <h2>Blog</h2>
+          <p>
+            {publicados} {publicados === 1 ? "artículo publicado" : "artículos publicados"}
+            {borradores > 0 && `, ${borradores} ${borradores === 1 ? "borrador" : "borradores"}`}. Escribe y
+            publica contenido.
+          </p>
+          <span className={estilos.accesoIr}>Ir al blog →</span>
         </Link>
         <Link href="/admin/datos" className={estilos.acceso}>
           <h2>Datos de la radio</h2>
