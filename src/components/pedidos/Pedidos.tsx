@@ -35,7 +35,7 @@ export function Pedidos({ whatsapp }: { whatsapp: string }) {
           <p>Escríbenos por WhatsApp y podrás escuchar tu mensaje al aire.</p>
         </div>
 
-        <ul className={estilos.opciones}>
+        <ul className={`${estilos.opciones} revelar`}>
           {OPCIONES.map(({ Icono, ...opcion }) => {
             const enlace = enlaceWhatsApp(whatsapp, opcion.mensaje);
             const contenido = (
@@ -52,7 +52,7 @@ export function Pedidos({ whatsapp }: { whatsapp: string }) {
               </>
             );
             return (
-              <li key={opcion.titulo} className="revelar">
+              <li key={opcion.titulo}>
                 {enlace ? (
                   <a className={estilos.opcion} href={enlace} target="_blank" rel="noopener noreferrer">
                     {contenido}

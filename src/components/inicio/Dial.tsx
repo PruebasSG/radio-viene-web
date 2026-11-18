@@ -33,11 +33,14 @@ export function Dial() {
             </li>
           ))}
         </ol>
-        <div className={estilos.aguja}>
-          <span className={estilos.agujaFrecuencia}>
-            {radio.frecuencia}
-            <small>{radio.banda}</small>
-          </span>
+        {/* La pista ocupa todo el dial: así la aguja se desliza con transform, sin recalcular la página */}
+        <div className={estilos.pistaAguja}>
+          <div className={estilos.aguja}>
+            <span className={estilos.agujaFrecuencia}>
+              {radio.frecuencia}
+              <small>{radio.banda}</small>
+            </span>
+          </div>
         </div>
       </div>
     </div>

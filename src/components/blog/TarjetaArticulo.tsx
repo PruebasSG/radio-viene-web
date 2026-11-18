@@ -13,7 +13,7 @@ export function TarjetaArticulo({ articulo, destacado = false, nivel = "h2" }: P
   const Titulo = nivel;
 
   return (
-    <article className={`${estilos.tarjeta} revelar`} data-destacado={destacado || undefined}>
+    <article className={estilos.tarjeta} data-destacado={destacado || undefined}>
       <Link href={`/blog/${articulo.slug}`} className={estilos.tarjetaEnlace}>
         <div className={estilos.tarjetaImagen}>
           {articulo.portadaUrl ? (

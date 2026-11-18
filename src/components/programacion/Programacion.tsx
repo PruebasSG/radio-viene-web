@@ -55,7 +55,7 @@ export function Programacion() {
             return (
               <li
                 key={`${programa.nombre}-${programa.inicio}`}
-                className={`${estilos.programa} revelar`}
+                className={estilos.programa}
                 data-al-aire={alAire || undefined}
               >
                 {alAire && <span className={estilos.avance} style={{ width: `${avance}%` }} aria-hidden="true" />}

@@ -333,14 +333,14 @@
 }
 
 .compartirWhatsApp {
-  border-color: #1f8f4e;
-  background: #1f8f4e;
+  border-color: #177a42;
+  background: #177a42;
   color: var(--blanco);
 }
 
 .compartirWhatsApp:hover {
-  border-color: #17733e;
-  background: #17733e;
+  border-color: #12653a;
+  background: #12653a;
 }
 
 .compartirIcono {

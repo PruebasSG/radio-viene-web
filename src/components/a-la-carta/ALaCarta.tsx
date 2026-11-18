@@ -16,11 +16,11 @@ export function ALaCarta() {
         <p className={`${estilos.intro} revelar`}>
           Estamos preparando una biblioteca con nuestros programas para que los escuches a tu ritmo.
         </p>
-        <ul className={estilos.categorias}>
+        <ul className={`${estilos.categorias} revelar`}>
           {categorias.map((categoria, indice) => {
             const Icono = ICONOS[indice % ICONOS.length];
             return (
-              <li key={categoria.nombre} className={`${estilos.categoria} revelar`}>
+              <li key={categoria.nombre} className={estilos.categoria}>
                 <Icono className={estilos.icono} />
                 <h3>{categoria.nombre}</h3>
                 <p>{categoria.descripcion}</p>

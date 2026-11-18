@@ -34,12 +34,20 @@ Supabase → SQL Editor:
    están las instrucciones para dar o quitar acceso a un administrador.
 2. `blog.sql`: artículos y carpeta de imágenes del blog.
 
-## SEO del blog
+## SEO
 
-- Cada artículo tiene título y descripción propios, dirección canónica, imagen
-  para compartir y datos estructurados `BlogPosting` para Google.
-- `/sitemap.xml` se genera solo con todos los artículos publicados.
-- Las imágenes se reducen en el navegador antes de subirse (máx. 1600 px, WebP).
+- **Portada:** título pensado para búsquedas, descripción editable desde el panel
+  («Quiénes somos») y datos estructurados `WebSite` + `RadioStation` (nombre del
+  sitio, logo, país, redes y señal en vivo).
+- **Artículos:** título y descripción propios, dirección canónica, imagen para
+  compartir (o la de la radio si no tienen portada) y datos `BlogPosting`.
+- **Dirección oficial:** `NEXT_PUBLIC_SITE_URL` (https://www.radioviene.net) se
+  usa en canónicas, mapa del sitio e imágenes para compartir.
+- `/sitemap.xml` se genera solo y `robots.txt` lo anuncia.
+- **Rendimiento:** tipografías alojadas en la web y precargadas sin saltos de
+  diseño, animaciones que no recalculan la página, imágenes reducidas antes de
+  subirse (máx. 1600 px, WebP).
+- Lighthouse (móvil): SEO 100, accesibilidad 100 y buenas prácticas 100.
 
 ## Seguridad
 
@@ -58,6 +66,7 @@ Supabase → SQL Editor:
 - **La web nunca se cae por el panel:** si Supabase no responde, la web pública
   usa el contenido de respaldo.
 - Cabeceras de seguridad en `next.config.ts` y versiones de dependencias fijadas.
+- Tipografías Literata y Figtree alojadas en `src/app/fuentes/` (licencia libre OFL).
 
 ## Estructura
 
