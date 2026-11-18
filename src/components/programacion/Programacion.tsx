@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useProgramacion } from "@/components/datos/ProgramacionProvider";
 import type { Dia } from "@/content/programacion";
 import { radio } from "@/content/radio";
-import { DIAS, NOMBRE_DIA, estaAlAire, horaLegible, momentoEnZona, programasDelDia } from "@/lib/horario";
+import { DIAS, NOMBRE_DIA, aMinutos, estaAlAire, horaLegible, momentoEnZona, programasDelDia } from "@/lib/horario";
 import { useAhora } from "@/lib/reloj";
 import estilos from "./programacion.module.css";
 
@@ -21,12 +21,12 @@ export function Programacion() {
   return (
     <section id="programacion" className={estilos.seccion} aria-labelledby="titulo-programacion">
       <div className="contenedor">
-        <div className={estilos.encabezado}>
+        <div className={`${estilos.encabezado} revelar`}>
           <h2 id="titulo-programacion">Programación</h2>
           <p>Horarios en {radio.nombreZonaHoraria}.</p>
         </div>
 
-        <div className={estilos.dias} role="group" aria-label="Elige un día">
+        <div className={`${estilos.dias} revelar`} role="group" aria-label="Elige un día">
           {DIAS.map((d) => (
             <button
               key={d}
@@ -46,12 +46,19 @@ export function Programacion() {
         <ol className={estilos.lista}>
           {programas.map((programa) => {
             const alAire = momento !== null && momento.dia === dia && estaAlAire(programa, momento);
+            const avance =
+              alAire && momento
+                ? ((momento.minutos - aMinutos(programa.inicio)) /
+                    (aMinutos(programa.fin) - aMinutos(programa.inicio))) *
+                  100
+                : 0;
             return (
               <li
                 key={`${programa.nombre}-${programa.inicio}`}
-                className={estilos.programa}
+                className={`${estilos.programa} revelar`}
                 data-al-aire={alAire || undefined}
               >
+                {alAire && <span className={estilos.avance} style={{ width: `${avance}%` }} aria-hidden="true" />}
                 <p className={estilos.horario}>
                   <time>{horaLegible(programa.inicio)}</time>
                   <span className={estilos.hasta}>

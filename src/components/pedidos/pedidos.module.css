@@ -3,55 +3,56 @@
   background: var(--gris-fondo);
 }
 
-.rejilla {
+.encabezado {
   display: grid;
-  gap: 2.5rem;
+  gap: 0.75rem;
+  max-width: 40rem;
 }
 
-@media (min-width: 56rem) {
-  .rejilla {
-    grid-template-columns: 1fr 1.1fr;
-    gap: 4rem;
-    align-items: start;
-  }
-}
-
-.texto {
-  display: grid;
-  gap: 1.25rem;
-}
-
-.texto p {
-  max-width: 46ch;
+.encabezado p {
+  font-size: 1.2rem;
   color: var(--gris);
-}
-
-.texto .numero {
-  color: var(--tinta);
 }
 
 .opciones {
   list-style: none;
-  margin: 0;
+  margin: 2.5rem 0 0;
   padding: 0;
   display: grid;
-  gap: 0.75rem;
+  gap: 1rem;
+}
+
+@media (min-width: 48rem) {
+  .opciones {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+}
+
+.opciones li {
+  display: flex;
 }
 
 .opcion {
-  display: flex;
-  align-items: flex-start;
-  gap: 1rem;
-  padding: 1.25rem 1.4rem;
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+  gap: 0.5rem;
+  width: 100%;
+  padding: clamp(1.4rem, 3vw, 1.85rem);
+  border: 1px solid var(--gris-linea);
   border-radius: var(--radio-grande);
   background: var(--blanco);
-  border: 1px solid var(--gris-linea);
   text-decoration: none;
-  transition: border-color 150ms ease;
+  transition:
+    transform 200ms ease,
+    box-shadow 200ms ease,
+    border-color 200ms ease;
 }
 
 a.opcion:hover {
+  transform: translateY(-4px);
   border-color: var(--azul);
+  box-shadow: 0 14px 30px rgb(14 33 64 / 10%);
 }
 
 .opcion[aria-disabled] {
@@ -59,23 +60,103 @@ a.opcion:hover {
 }
 
 .icono {
-  flex: none;
-  width: 1.75rem;
-  height: 1.75rem;
-  margin-top: 0.1rem;
+  display: grid;
+  place-items: center;
+  width: 3.25rem;
+  height: 3.25rem;
+  margin-bottom: 0.5rem;
+  border-radius: 50%;
+  background: var(--azul-suave);
   color: var(--azul);
+  transition:
+    background-color 200ms ease,
+    color 200ms ease;
+}
+
+.icono svg {
+  width: 1.6rem;
+  height: 1.6rem;
+}
+
+a.opcion:hover .icono {
+  background: var(--dorado);
+  color: var(--azul-noche);
 }
 
 .opcionTitulo {
-  display: block;
   font-family: var(--fuente-titulos);
-  font-size: 1.25rem;
+  font-size: 1.35rem;
   font-weight: 600;
-  line-height: 1.3;
+  line-height: 1.25;
 }
 
 .opcionDetalle {
-  display: block;
-  margin-top: 0.15rem;
   color: var(--gris);
+}
+
+.opcionAccion {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-top: 0.75rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #1f8f4e;
+}
+
+.whatsapp {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.notaVoz {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  margin-top: 1.75rem;
+  max-width: 48rem;
+  color: var(--gris);
+}
+
+.notaVoz strong {
+  color: var(--tinta);
+}
+
+.notaVozIcono {
+  flex: none;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-top: 0.15rem;
+  color: var(--azul);
+}
+
+/* En el móvil, ícono a la izquierda y texto a la derecha: tarjetas más bajas */
+@media (max-width: 47.99rem) {
+  .opcion {
+    grid-template-columns: auto 1fr;
+    grid-template-rows: none;
+    column-gap: 1rem;
+    row-gap: 0.25rem;
+    padding: 1.15rem 1.25rem;
+  }
+
+  .icono {
+    grid-row: span 3;
+    width: 2.75rem;
+    height: 2.75rem;
+    margin-bottom: 0;
+  }
+
+  .icono svg {
+    width: 1.35rem;
+    height: 1.35rem;
+  }
+
+  .opcionTitulo {
+    font-size: 1.2rem;
+  }
+
+  .opcionAccion {
+    margin-top: 0.35rem;
+  }
 }

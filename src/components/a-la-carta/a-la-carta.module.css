@@ -2,6 +2,22 @@
   padding-block: var(--seccion);
 }
 
+.encabezado {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+}
+
+.pronto {
+  padding: 0.2rem 0.75rem;
+  border-radius: 999px;
+  background: var(--dorado);
+  color: var(--azul-noche);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
 .intro {
   margin-top: 1rem;
   max-width: 52ch;
@@ -13,22 +29,62 @@
   margin: 2.5rem 0 0;
   padding: 0;
   display: grid;
-  gap: 2rem 3rem;
+  gap: 1rem;
 }
 
-@media (min-width: 44rem) {
+@media (min-width: 40rem) {
   .categorias {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 64rem) {
+  .categorias {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
 
 .categoria {
-  padding-top: 1.25rem;
-  border-top: 2px solid var(--azul);
+  display: grid;
+  align-content: start;
+  gap: 0.4rem;
+  padding: 1.5rem;
+  border: 1px solid var(--gris-linea);
+  border-radius: var(--radio-grande);
+  background: var(--blanco);
+}
+
+.icono {
+  width: 2rem;
+  height: 2rem;
+  margin-bottom: 0.5rem;
+  color: var(--dorado);
 }
 
 .categoria p {
-  margin-top: 0.4rem;
   color: var(--gris);
-  max-width: 40ch;
+}
+
+/* En el móvil, ícono a un lado y sin recuadro: una lista compacta */
+@media (max-width: 39.99rem) {
+  .categorias {
+    gap: 0;
+  }
+
+  .categoria {
+    grid-template-columns: auto 1fr;
+    column-gap: 1rem;
+    padding: 1.1rem 0;
+    border: 0;
+    border-bottom: 1px solid var(--gris-linea);
+    border-radius: 0;
+    background: none;
+  }
+
+  .icono {
+    grid-row: span 2;
+    width: 1.75rem;
+    height: 1.75rem;
+    margin: 0.1rem 0 0;
+  }
 }

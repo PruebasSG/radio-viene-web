@@ -1,36 +1,44 @@
+/* Cabecera fija. Sobre el inicio se funde con el fondo; al bajar se vuelve compacta. */
 .cabecera {
-  /* En la app instalada del iPhone, deja libre la zona de la isla dinámica */
+  position: sticky;
+  top: 0;
+  z-index: 40;
   padding-top: env(safe-area-inset-top, 0px);
   background: var(--azul-noche);
   color: var(--sobre-oscuro);
-  border-bottom: 1px solid rgb(244 246 250 / 10%);
+  border-bottom: 1px solid transparent;
+  transition:
+    background-color 250ms ease,
+    border-color 250ms ease,
+    box-shadow 250ms ease;
+}
+
+.cabecera[data-compacta] {
+  background: rgb(14 33 64 / 92%);
+  border-bottom-color: rgb(201 162 74 / 25%);
+  box-shadow: 0 6px 24px rgb(5 14 30 / 25%);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
 }
 
 .interior {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
-  gap: 0.6rem 2rem;
-  padding-block: 1rem;
+  gap: 1rem 2rem;
+  min-height: 4.5rem;
+  transition: min-height 250ms ease;
 }
 
-/* En móvil el menú ocupa su propia línea y nunca es más ancho que la pantalla */
-.interior > nav {
-  flex: 1 1 100%;
-  min-width: 0;
-}
-
-@media (min-width: 52rem) {
-  .interior > nav {
-    flex: 0 1 auto;
-  }
+.cabecera[data-compacta] .interior {
+  min-height: 3.75rem;
 }
 
 .marca {
   display: inline-flex;
   align-items: baseline;
-  gap: 0.6rem;
+  gap: 0.55rem;
+  margin-right: auto;
+  white-space: nowrap;
   text-decoration: none;
 }
 
@@ -46,22 +54,22 @@
   color: var(--dorado);
 }
 
+/* ---------- Menú de escritorio ---------- */
+
+.navEscritorio {
+  display: none;
+}
+
 .menu {
   list-style: none;
   margin: 0;
   padding: 0;
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.15rem 1.25rem;
-}
-
-@media (min-width: 52rem) {
-  .menu {
-    gap: 0.25rem 1.5rem;
-  }
+  gap: 0.25rem 1.75rem;
 }
 
 .menu a {
+  position: relative;
   display: block;
   padding-block: 0.4rem;
   font-size: 1rem;
@@ -71,6 +79,153 @@
   transition: color 150ms ease;
 }
 
+/* Línea dorada que crece al pasar el ratón */
+.menu a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: var(--dorado);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 200ms ease;
+}
+
 .menu a:hover {
-  color: var(--dorado-claro);
+  color: var(--sobre-oscuro);
+}
+
+.menu a:hover::after {
+  transform: scaleX(1);
+}
+
+/* ---------- Acciones (escuchar y menú del móvil) ---------- */
+
+.acciones {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* Oculto no ocupa lugar; al aparecer, entra con un pequeño salto */
+.escuchar {
+  display: none;
+}
+
+.escuchar[data-visible] {
+  display: flex;
+  animation: asomar 220ms ease-out;
+}
+
+@keyframes asomar {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.9);
+  }
+}
+
+.botonMenu {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-height: 2.75rem;
+  padding: 0.4rem 0.95rem;
+  border: 1px solid rgb(244 246 250 / 25%);
+  border-radius: 999px;
+  background: none;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.iconoMenu {
+  display: grid;
+  gap: 5px;
+  width: 1.1rem;
+}
+
+.iconoMenu span {
+  display: block;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+  transition: transform 200ms ease;
+}
+
+.iconoMenu[data-abierto] span:first-child {
+  transform: translateY(3.5px) rotate(45deg);
+}
+
+.iconoMenu[data-abierto] span:last-child {
+  transform: translateY(-3.5px) rotate(-45deg);
+}
+
+/* En pantallas muy estrechas el botón de menú muestra solo su ícono */
+@media (max-width: 26rem) {
+  .botonMenu {
+    padding-inline: 0.75rem;
+  }
+
+  .textoMenu {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 21rem) {
+  .marcaFrecuencia {
+    display: none;
+  }
+}
+
+/* ---------- Menú desplegable del móvil ---------- */
+
+.menuMovil {
+  border-top: 1px solid rgb(244 246 250 / 10%);
+}
+
+.menuMovil[data-abierto] {
+  animation: desplegar 220ms ease-out;
+}
+
+@keyframes desplegar {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
+.menuMovil ul {
+  list-style: none;
+  margin: 0;
+  padding-block: 0.5rem 1.25rem;
+}
+
+.menuMovil a {
+  display: block;
+  padding-block: 0.85rem;
+  border-bottom: 1px solid rgb(244 246 250 / 8%);
+  font-family: var(--fuente-titulos);
+  font-size: 1.4rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+/* ---------- Escritorio ---------- */
+
+@media (min-width: 60rem) {
+  .navEscritorio {
+    display: block;
+  }
+
+  .botonMenu,
+  .menuMovil {
+    display: none;
+  }
 }

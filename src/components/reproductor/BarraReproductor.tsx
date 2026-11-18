@@ -1,6 +1,7 @@
 "use client";
 
 import { useProgramacion } from "@/components/datos/ProgramacionProvider";
+import { Ecualizador } from "@/components/inicio/Ecualizador";
 import { radio } from "@/content/radio";
 import { momentoEnZona, programaActual } from "@/lib/horario";
 import { useAhora } from "@/lib/reloj";
@@ -30,7 +31,7 @@ export function BarraReproductor() {
           <BotonEscuchar tamano="chico" conTexto={false} />
           <div className={estilos.barraInfo}>
             <p className={estilos.barraTitulo}>
-              {estado === "sonando" && <span className={estilos.punto} aria-hidden="true" />}
+              {estado === "sonando" && <Ecualizador activo />}
               {programa?.nombre ?? `${radio.nombre} ${radio.frecuencia} ${radio.banda}`}
             </p>
             <p className={estilos.barraDetalle}>

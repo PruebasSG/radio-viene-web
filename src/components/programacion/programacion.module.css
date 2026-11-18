@@ -136,3 +136,25 @@
   margin-top: 1.5rem;
   color: var(--gris);
 }
+
+/* Avance del programa que está al aire */
+.programa {
+  position: relative;
+}
+
+.avance {
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  height: 3px;
+  background: var(--dorado);
+  transition: width 1s ease;
+}
+
+.programa:not([data-al-aire]) {
+  transition: background-color 200ms ease;
+}
+
+.programa:not([data-al-aire]):hover {
+  background: var(--gris-fondo);
+}

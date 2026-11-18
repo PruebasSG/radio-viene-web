@@ -38,6 +38,13 @@
   --alto-barra: 4.5rem;
 }
 
+/* En monitores grandes, la web se abre un poco más */
+@media (min-width: 100rem) {
+  :root {
+    --ancho: 78rem;
+  }
+}
+
 *,
 *::before,
 *::after {
@@ -159,5 +166,27 @@ button {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+/* ---------------------------------------------------------
+   Aparición suave al bajar por la página.
+   Solo con CSS (sin librerías). Si el navegador no lo admite,
+   o la persona pidió reducir el movimiento, todo se ve quieto.
+   --------------------------------------------------------- */
+@keyframes revelar {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .revelar {
+      animation: revelar linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 60%;
+    }
   }
 }

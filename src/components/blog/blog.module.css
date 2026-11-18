@@ -372,3 +372,48 @@
 .relacionados h2 {
   margin-bottom: 2rem;
 }
+
+/* ---------- Carrusel de la portada (solo en el móvil) ---------- */
+
+@media (max-width: 39.99rem) {
+  .carrusel {
+    grid-auto-flow: column;
+    grid-auto-columns: 82%;
+    gap: 1rem;
+    margin-inline: calc(var(--margen) * -1);
+    padding-inline: var(--margen);
+    padding-bottom: 0.75rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--margen);
+    scrollbar-width: none;
+  }
+
+  .carrusel::-webkit-scrollbar {
+    display: none;
+  }
+
+  .carrusel > * {
+    scroll-snap-align: start;
+  }
+}
+
+/* En la portada, de tableta en adelante, los tres artículos van en una fila */
+@media (min-width: 40rem) {
+  .carrusel {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.5rem;
+  }
+
+  .carrusel .tarjetaTitulo {
+    font-size: 1.25rem;
+  }
+}
+
+.tarjetaImagen {
+  transition: box-shadow 250ms ease;
+}
+
+.tarjetaEnlace:hover .tarjetaImagen {
+  box-shadow: 0 14px 30px rgb(14 33 64 / 18%);
+}

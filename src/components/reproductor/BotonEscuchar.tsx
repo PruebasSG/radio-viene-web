@@ -12,7 +12,7 @@ const TEXTO: Record<EstadoReproductor, string> = {
 };
 
 type Props = {
-  tamano?: "grande" | "chico";
+  tamano?: "grande" | "chico" | "mini";
   /** En la barra inferior solo se ve el ícono; el texto queda para lectores de pantalla. */
   conTexto?: boolean;
 };

@@ -1,21 +1,39 @@
+/* ===================== Inicio ===================== */
+
 .inicio {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: clamp(2.5rem, 6vw, 4rem);
+  padding-block: clamp(2rem, 6vw, 4.5rem) clamp(2rem, 5vw, 3rem);
   background: var(--azul-noche);
   color: var(--sobre-oscuro);
-  padding-block: clamp(2.5rem, 7vw, 5rem) clamp(2.5rem, 6vw, 4rem);
   overflow: hidden;
+}
+
+/* En pantallas grandes, el inicio ocupa la primera pantalla completa */
+@media (min-width: 60rem) and (min-height: 40rem) {
+  .inicio {
+    min-height: calc(100svh - 4.5rem - env(safe-area-inset-top, 0px));
+  }
 }
 
 .rejilla {
   display: grid;
-  gap: 2rem;
-  align-items: end;
+  gap: 2.5rem;
+  align-items: center;
 }
 
-@media (min-width: 52rem) {
+@media (min-width: 60rem) {
   .rejilla {
-    grid-template-columns: 1fr auto;
-    gap: 3rem;
+    grid-template-columns: minmax(0, 1.25fr) minmax(20rem, 0.9fr);
+    gap: clamp(3rem, 6vw, 6rem);
   }
+}
+
+.presentacion {
+  display: grid;
+  justify-items: start;
 }
 
 .titulo {
@@ -24,6 +42,7 @@
   line-height: 0.92;
   letter-spacing: -0.035em;
   font-variation-settings: "opsz" 72;
+  animation: entrar 900ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
 }
 
 .lema {
@@ -31,13 +50,24 @@
   max-width: 28ch;
   font-size: clamp(1.2rem, 2.4vw, 1.5rem);
   color: var(--sobre-oscuro-suave);
+  animation: entrar 900ms cubic-bezier(0.2, 0.7, 0.2, 1) 120ms both;
 }
 
 .control {
   display: grid;
   gap: 0.9rem;
   justify-items: start;
-  max-width: 22rem;
+  max-width: 24rem;
+  margin-top: clamp(1.75rem, 4vw, 2.5rem);
+  animation: entrar 900ms cubic-bezier(0.2, 0.7, 0.2, 1) 240ms both;
+}
+
+/* Al cargar, el título, el lema y el botón aparecen uno tras otro */
+@keyframes entrar {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
 }
 
 .mensaje {
@@ -50,10 +80,164 @@
   min-height: 0;
 }
 
-/* ---------- Dial de sintonía ---------- */
+/* ===================== Tarjeta «Al aire» ===================== */
+
+.alAire {
+  display: grid;
+  gap: 0.6rem;
+  align-content: start;
+  min-height: 14rem;
+  padding: clamp(1.4rem, 3vw, 2rem);
+  border: 1px solid rgb(244 246 250 / 10%);
+  border-top: 3px solid var(--dorado);
+  border-radius: var(--radio-grande);
+  background: var(--azul-noche-2);
+  animation: entrar 900ms cubic-bezier(0.2, 0.7, 0.2, 1) 360ms both;
+}
+
+.alAireEstado {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--dorado-claro);
+}
+
+.alAirePrograma {
+  font-family: var(--fuente-titulos);
+  font-size: clamp(1.6rem, 3vw, 2.1rem);
+  font-weight: 600;
+  line-height: 1.15;
+  text-wrap: balance;
+}
+
+.alAireDetalle {
+  color: var(--sobre-oscuro-suave);
+}
+
+.progreso {
+  display: grid;
+  gap: 0.45rem;
+  margin-top: 0.5rem;
+}
+
+.progresoBarra {
+  height: 6px;
+  border-radius: 999px;
+  background: rgb(244 246 250 / 12%);
+  overflow: hidden;
+}
+
+.progresoBarra span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(to right, var(--dorado), var(--dorado-claro));
+  transition: width 1s ease;
+}
+
+.progresoTextos {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--sobre-oscuro-suave);
+}
+
+.progresoRestante {
+  color: var(--sobre-oscuro);
+  font-weight: 600;
+}
+
+.cancion {
+  padding: 0.6rem 0.8rem;
+  border-radius: var(--radio-chico);
+  background: rgb(244 246 250 / 6%);
+  font-size: 0.95rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cancion span {
+  color: var(--dorado);
+}
+
+.despues {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.2rem 0.5rem;
+  margin-top: 0.4rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid rgb(244 246 250 / 10%);
+  font-size: 0.95rem;
+  color: var(--sobre-oscuro-suave);
+}
+
+.despues strong {
+  font-family: var(--fuente-titulos);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--sobre-oscuro);
+}
+
+.oyentes {
+  font-size: 0.88rem;
+  color: var(--sobre-oscuro-suave);
+}
+
+/* ===================== Ecualizador ===================== */
+
+.ecualizador {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 0.95rem;
+}
+
+.ecualizador span {
+  width: 3px;
+  height: 30%;
+  border-radius: 2px;
+  background: var(--dorado);
+  transition: height 300ms ease;
+}
+
+.ecualizador[data-activo] span {
+  animation: rebotar 900ms ease-in-out infinite alternate;
+}
+
+.ecualizador[data-activo] span:nth-child(2) {
+  animation-duration: 700ms;
+  animation-delay: -200ms;
+}
+
+.ecualizador[data-activo] span:nth-child(3) {
+  animation-duration: 1100ms;
+  animation-delay: -400ms;
+}
+
+.ecualizador[data-activo] span:nth-child(4) {
+  animation-duration: 800ms;
+  animation-delay: -600ms;
+}
+
+@keyframes rebotar {
+  from {
+    height: 20%;
+  }
+
+  to {
+    height: 100%;
+  }
+}
+
+/* ===================== Dial de sintonía ===================== */
 
 .dial {
-  margin-top: clamp(3rem, 7vw, 4.5rem);
   padding-top: 3.25rem;
 }
 
@@ -125,6 +309,39 @@
     0 0 40px 6px rgb(201 162 74 / 25%);
 }
 
+/* Ondas que salen de la aguja mientras suena la radio */
+.dial[data-estado="sonando"] .aguja::before,
+.dial[data-estado="sonando"] .aguja::after {
+  content: "";
+  position: absolute;
+  top: 0.4rem;
+  left: 50%;
+  width: 2.5rem;
+  height: 2.5rem;
+  margin-left: -1.25rem;
+  border: 2px solid var(--dorado);
+  border-radius: 50%;
+  opacity: 0;
+  animation: onda 2.4s ease-out infinite;
+  pointer-events: none;
+}
+
+.dial[data-estado="sonando"] .aguja::after {
+  animation-delay: 1.2s;
+}
+
+@keyframes onda {
+  from {
+    opacity: 0.55;
+    transform: scale(0.3);
+  }
+
+  to {
+    opacity: 0;
+    transform: scale(2.4);
+  }
+}
+
 .agujaFrecuencia {
   position: absolute;
   top: 0;
@@ -146,44 +363,17 @@
   letter-spacing: 0.04em;
 }
 
-/* ---------- Ahora y después ---------- */
-
-.ahoraYDespues {
-  display: grid;
-  gap: 1.5rem;
-  min-height: 5.5rem;
-  margin-top: 3.75rem;
+/* Los horarios nunca se parten; en pantallas muy estrechas solo se muestra lo que falta */
+.progresoTextos span {
+  white-space: nowrap;
 }
 
-@media (min-width: 40rem) {
-  .ahoraYDespues {
-    grid-template-columns: 1fr 1fr;
-    gap: 3rem;
+@media (max-width: 24rem) {
+  .progresoTextos {
+    justify-content: flex-start;
   }
-}
 
-.franja {
-  border-left: 2px solid var(--dorado);
-  padding-left: 1rem;
-}
-
-.franja + .franja {
-  border-left-color: rgb(244 246 250 / 25%);
-}
-
-.franjaEtiqueta {
-  font-size: 0.95rem;
-  color: var(--dorado-claro);
-}
-
-.franjaPrograma {
-  font-family: var(--fuente-titulos);
-  font-size: 1.45rem;
-  font-weight: 600;
-  line-height: 1.25;
-}
-
-.franjaDetalle {
-  font-size: 0.98rem;
-  color: var(--sobre-oscuro-suave);
+  .progresoTextos span:not(.progresoRestante) {
+    display: none;
+  }
 }

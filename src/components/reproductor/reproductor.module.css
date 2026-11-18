@@ -74,6 +74,36 @@
   height: 1.35rem;
 }
 
+.boton[data-tamano="mini"] {
+  gap: 0.55rem;
+}
+
+.boton[data-tamano="mini"] .circulo {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.boton[data-tamano="mini"] .icono {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.boton[data-tamano="mini"] .texto {
+  font-size: 0.95rem;
+}
+
+/* En pantallas chicas, el botón de la cabecera muestra solo el círculo */
+@media (max-width: 30rem) {
+  .boton[data-tamano="mini"] .texto {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+}
+
 .boton[data-tamano="chico"][data-estado="sonando"] .circulo {
   box-shadow: 0 0 0 5px rgb(201 162 74 / 20%);
 }
@@ -132,17 +162,3 @@
   text-overflow: ellipsis;
 }
 
-.punto {
-  flex: none;
-  width: 0.55rem;
-  height: 0.55rem;
-  border-radius: 50%;
-  background: var(--dorado);
-  animation: latido 1.8s ease-in-out infinite;
-}
-
-@keyframes latido {
-  50% {
-    opacity: 0.35;
-  }
-}
