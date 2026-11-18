@@ -8,7 +8,8 @@ import { Programacion } from "@/components/programacion/Programacion";
 import { STREAM_URL, SITE_URL } from "@/config/emisora";
 import { radio, type Ajustes } from "@/content/radio";
 import { obtenerUltimosArticulos } from "@/lib/blog";
-import { obtenerAjustes } from "@/lib/datos";
+import { obtenerAjustes, obtenerProgramacion } from "@/lib/datos";
+import { obtenerFotos } from "@/lib/fotos";
 
 const nombreCompleto = `${radio.nombre} ${radio.frecuencia} ${radio.banda}`;
 
@@ -70,14 +71,21 @@ function datosEstructurados(ajustes: Ajustes) {
 }
 
 export default async function PaginaPrincipal() {
-  const [ajustes, articulos] = await Promise.all([obtenerAjustes(), obtenerUltimosArticulos(3)]);
+  const [ajustes, articulos, fotos, programas] = await Promise.all([
+    obtenerAjustes(),
+    obtenerUltimosArticulos(3),
+    obtenerFotos("portada"),
+    obtenerProgramacion(),
+  ]);
+  // Programas distintos (uno que se emite varios días cuenta una sola vez).
+  const totalProgramas = new Set(programas.map((programa) => programa.nombre)).size;
   // Escapamos "<" para que ningún texto pueda cerrar la etiqueta <script>.
   const jsonLd = JSON.stringify(datosEstructurados(ajustes)).replace(/</g, "\\u003c");
 
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd }} />
-      <Inicio lema={ajustes.lema} />
+      <Inicio ajustes={ajustes} fotos={fotos} totalProgramas={totalProgramas} />
       <Programacion />
       <Pedidos whatsapp={ajustes.whatsapp} />
       <Oracion whatsapp={ajustes.whatsapp} />

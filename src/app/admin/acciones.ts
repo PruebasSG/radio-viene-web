@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { REDES_DISPONIBLES } from "@/content/radio";
 import { exigirAdmin } from "@/lib/admin/sesion";
-import type { EstadoFormulario, ResultadoImagen } from "@/lib/admin/tipos";
+import type { EstadoFormulario, ResultadoFoto, ResultadoImagen } from "@/lib/admin/tipos";
 import {
   DIAS_SEMANA,
   erroresPorCampo,
@@ -13,8 +13,10 @@ import {
   esquemaAjustes,
   esquemaArticulo,
   esquemaIngreso,
+  esquemaPortada,
   esquemaPrograma,
 } from "@/lib/admin/validacion";
+import { SECCIONES_FOTOS, type SeccionFoto } from "@/lib/fotos";
 import { aMinutos, horaLegible, NOMBRE_DIA } from "@/lib/horario";
 import { SUPABASE_URL } from "@/lib/supabase/config";
 import { crearClienteServidor } from "@/lib/supabase/servidor";
@@ -168,6 +170,24 @@ export async function guardarAjustes(_: EstadoFormulario, datos: FormData): Prom
   };
   for (const red of REDES_DISPONIBLES) valores[`redes.${red}`] = texto(datos, `redes.${red}`);
 
+  // Los textos de la portada solo llegan si ya existe su lugar en la base de datos (fotos.sql).
+  const conPortada = datos.get("conPortada") === "1";
+  let portada: Record<string, unknown> = {};
+  if (conPortada) {
+    valores.titular = texto(datos, "titular");
+    valores.titularDestacado = texto(datos, "titularDestacado");
+    valores.frases = texto(datos, "frases");
+    const resultadoPortada = esquemaPortada.safeParse(valores);
+    if (!resultadoPortada.success) {
+      return { mensaje: "Revisa los campos marcados.", errores: erroresPorCampo(resultadoPortada.error), valores };
+    }
+    portada = {
+      titular: resultadoPortada.data.titular,
+      titular_destacado: resultadoPortada.data.titularDestacado,
+      frases: resultadoPortada.data.frases,
+    };
+  }
+
   const resultado = esquemaAjustes.safeParse({
     lema: valores.lema,
     descripcion: valores.descripcion,
@@ -184,6 +204,7 @@ export async function guardarAjustes(_: EstadoFormulario, datos: FormData): Prom
     .from("ajustes")
     .update({
       ...resto,
+      ...portada,
       redes: REDES_DISPONIBLES.filter((red) => redes[red] !== "").map((red) => ({ nombre: red, url: redes[red] })),
     })
     .eq("id", 1)
@@ -328,4 +349,155 @@ export async function eliminarArticulo(id: string): Promise<void> {
 
   actualizarWeb();
   redirect("/admin/blog?eliminado=1");
+}
+
+// ---------- Fotos ----------
+
+const actualizarFotosWeb = () => revalidatePath("/", "layout");
+
+/** Lee y comprueba una imagen recibida del navegador. */
+async function leerImagen(valor: FormDataEntryValue | null): Promise<{ bytes: Uint8Array; tipo: string } | null> {
+  if (!(valor instanceof File) || valor.size === 0 || valor.size > MAXIMO_IMAGEN) return null;
+  if (!TIPOS_IMAGEN[valor.type]) return null;
+  const bytes = new Uint8Array(await valor.arrayBuffer());
+  return esImagenReal(bytes) ? { bytes, tipo: valor.type } : null;
+}
+
+/** Ruta dentro de la carpeta "fotos" a partir de su dirección pública. */
+function rutaDeFoto(url: string): string | null {
+  const marca = "/storage/v1/object/public/fotos/";
+  const i = url.indexOf(marca);
+  return i >= 0 ? decodeURIComponent(url.slice(i + marca.length)) : null;
+}
+
+/** Sube una foto en dos tamaños (ya reducidos en el navegador) y la añade al final de su sección. */
+export async function subirFoto(datos: FormData): Promise<ResultadoFoto> {
+  const { supabase } = await exigirAdmin();
+
+  const seccion = texto(datos, "seccion");
+  if (!SECCIONES_FOTOS.includes(seccion as SeccionFoto)) return { error: "Sección no válida." };
+  const ancho = Number(texto(datos, "ancho"));
+  const alto = Number(texto(datos, "alto"));
+  if (!Number.isInteger(ancho) || !Number.isInteger(alto) || ancho < 1 || alto < 1 || ancho > 4000 || alto > 4000) {
+    return { error: "No se pudo leer el tamaño de la foto." };
+  }
+
+  const [grande, mini] = await Promise.all([leerImagen(datos.get("imagen")), leerImagen(datos.get("mini"))]);
+  if (!grande || !mini) return { error: "El archivo no parece una foto válida (JPG, PNG o WebP de hasta 3 MB)." };
+
+  const hoy = new Date();
+  const base = `${seccion}/${hoy.getUTCFullYear()}/${crypto.randomUUID()}`;
+  const ruta = `${base}.${TIPOS_IMAGEN[grande.tipo]}`;
+  const rutaMini = `${base}-mini.${TIPOS_IMAGEN[mini.tipo]}`;
+  const opciones = { cacheControl: "31536000", upsert: false };
+
+  const subidas = await Promise.all([
+    supabase.storage.from("fotos").upload(ruta, grande.bytes, { ...opciones, contentType: grande.tipo }),
+    supabase.storage.from("fotos").upload(rutaMini, mini.bytes, { ...opciones, contentType: mini.tipo }),
+  ]);
+  if (subidas.some((subida) => subida.error)) {
+    console.error("Error al subir la foto:", subidas.map((subida) => subida.error?.message).join(" / "));
+    await supabase.storage.from("fotos").remove([ruta, rutaMini]);
+    return { error: "No se pudo subir la foto. Inténtalo de nuevo." };
+  }
+
+  const { data: ultima } = await supabase
+    .from("fotos")
+    .select("orden")
+    .eq("seccion", seccion)
+    .order("orden", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  const { error } = await supabase.from("fotos").insert({
+    url: supabase.storage.from("fotos").getPublicUrl(ruta).data.publicUrl,
+    url_mini: supabase.storage.from("fotos").getPublicUrl(rutaMini).data.publicUrl,
+    ancho,
+    alto,
+    seccion,
+    orden: (ultima?.orden ?? -1) + 1,
+  });
+  if (error) {
+    console.error("Error al guardar la foto:", error.message);
+    await supabase.storage.from("fotos").remove([ruta, rutaMini]);
+    return { error: "No se pudo guardar la foto. Inténtalo de nuevo." };
+  }
+
+  actualizarFotosWeb();
+  return { ok: true };
+}
+
+/** Cambia la descripción de una foto o si se muestra en la web. */
+export async function actualizarFoto(
+  id: string,
+  cambios: { alt?: string; activo?: boolean },
+): Promise<ResultadoFoto> {
+  const { supabase } = await exigirAdmin();
+  if (!esIdValido(id)) return { error: "No encontramos esa foto." };
+
+  const fila: { alt?: string; activo?: boolean } = {};
+  if (typeof cambios.alt === "string") {
+    const alt = cambios.alt.trim();
+    if (alt.length > 200) return { error: "La descripción puede tener hasta 200 caracteres." };
+    fila.alt = alt;
+  }
+  if (typeof cambios.activo === "boolean") fila.activo = cambios.activo;
+  if (Object.keys(fila).length === 0) return { ok: true };
+
+  const { data, error } = await supabase.from("fotos").update(fila).eq("id", id).select("id");
+  if (error || !data?.length) return { error: "No se pudo guardar el cambio. Inténtalo de nuevo." };
+
+  actualizarFotosWeb();
+  return { ok: true };
+}
+
+/** Mueve una foto un lugar antes o después dentro de su sección. */
+export async function moverFoto(id: string, direccion: "antes" | "despues"): Promise<ResultadoFoto> {
+  const { supabase } = await exigirAdmin();
+  if (!esIdValido(id)) return { error: "No encontramos esa foto." };
+
+  const { data: foto } = await supabase.from("fotos").select("seccion").eq("id", id).maybeSingle();
+  if (!foto) return { error: "No encontramos esa foto." };
+
+  const { data: lista, error } = await supabase
+    .from("fotos")
+    .select("id, orden")
+    .eq("seccion", foto.seccion)
+    .order("orden");
+  if (error || !lista) return { error: "No se pudo ordenar. Inténtalo de nuevo." };
+
+  const i = lista.findIndex((f) => f.id === id);
+  const j = direccion === "antes" ? i - 1 : i + 1;
+  if (i < 0 || j < 0 || j >= lista.length) return { ok: true };
+
+  // Intercambiamos posiciones y numeramos de nuevo toda la sección (0, 1, 2…) para mantener el orden limpio.
+  [lista[i], lista[j]] = [lista[j], lista[i]];
+  const cambios = lista
+    .map((f, posicion) => ({ id: f.id, orden: posicion, antes: f.orden }))
+    .filter((f) => f.orden !== f.antes);
+  for (const cambio of cambios) {
+    const { error: errorOrden } = await supabase.from("fotos").update({ orden: cambio.orden }).eq("id", cambio.id);
+    if (errorOrden) return { error: "No se pudo ordenar. Inténtalo de nuevo." };
+  }
+
+  actualizarFotosWeb();
+  return { ok: true };
+}
+
+/** Elimina una foto de la web y sus dos archivos de la carpeta. */
+export async function eliminarFoto(id: string): Promise<ResultadoFoto> {
+  const { supabase } = await exigirAdmin();
+  if (!esIdValido(id)) return { error: "No encontramos esa foto." };
+
+  const { data: foto } = await supabase.from("fotos").select("url, url_mini").eq("id", id).maybeSingle();
+  if (!foto) return { error: "No encontramos esa foto." };
+
+  const { error } = await supabase.from("fotos").delete().eq("id", id);
+  if (error) return { error: "No se pudo eliminar. Inténtalo de nuevo." };
+
+  const rutas = [rutaDeFoto(foto.url), rutaDeFoto(foto.url_mini)].filter((ruta): ruta is string => ruta !== null);
+  if (rutas.length) await supabase.storage.from("fotos").remove(rutas);
+
+  actualizarFotosWeb();
+  return { ok: true };
 }

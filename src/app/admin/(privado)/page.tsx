@@ -7,10 +7,12 @@ export const metadata: Metadata = { title: "Inicio" };
 
 export default async function InicioPanel() {
   const { supabase, email } = await exigirAdmin();
-  const [{ data: programas }, { data: articulos }] = await Promise.all([
+  const [{ data: programas }, { data: articulos }, { data: fotos }] = await Promise.all([
     supabase.from("programas").select("activo"),
     supabase.from("articulos").select("estado"),
+    supabase.from("fotos").select("seccion"),
   ]);
+  const fotosPortada = fotos?.filter((f) => f.seccion === "portada").length ?? 0;
 
   const visibles = programas?.filter((p) => p.activo).length ?? 0;
   const ocultos = (programas?.length ?? 0) - visibles;
@@ -26,7 +28,7 @@ export default async function InicioPanel() {
         </div>
       </div>
 
-      <div className={estilos.accesos} data-tres>
+      <div className={estilos.accesos} data-cuatro>
         <Link href="/admin/programacion" className={estilos.acceso}>
           <h2>Programación</h2>
           <p>
@@ -45,9 +47,17 @@ export default async function InicioPanel() {
           </p>
           <span className={estilos.accesoIr}>Ir al blog →</span>
         </Link>
+        <Link href="/admin/fotos" className={estilos.acceso}>
+          <h2>Fotos</h2>
+          <p>
+            {fotosPortada === 1 ? "1 foto" : `${fotosPortada} fotos`} en el mosaico del inicio. Sube fotos de la
+            cabina, los cultos y la comunidad.
+          </p>
+          <span className={estilos.accesoIr}>Ir a fotos →</span>
+        </Link>
         <Link href="/admin/datos" className={estilos.acceso}>
           <h2>Datos de la radio</h2>
-          <p>Lema, texto de presentación, WhatsApp, correo y redes sociales.</p>
+          <p>Titular de la portada, frases de la cinta, lema, WhatsApp, correo y redes.</p>
           <span className={estilos.accesoIr}>Editar datos →</span>
         </Link>
       </div>
