@@ -12,7 +12,10 @@ administrativo conectado a [Supabase](https://supabase.com).
   si dos programas se cruzan de horario.
 - **Blog:** escribir, programar y publicar artículos con imagen de portada,
   vista previa del texto y vista previa de cómo se verán en Google.
-- **Datos de la radio:** lema, texto de presentación, WhatsApp, correo y redes.
+- **Fotos:** subir varias a la vez (se reducen solas a dos tamaños), describirlas,
+  ordenarlas, ocultarlas o eliminarlas, por sección: portada, cabina y comunidad.
+- **Datos de la radio:** titular de la portada, frases de la cinta, lema,
+  texto de presentación, WhatsApp, correo y redes.
 
 Los cambios se ven en la web en unos segundos.
 
@@ -33,6 +36,20 @@ Supabase → SQL Editor:
 1. `esquema.sql`: administradores, programación y datos de la radio. Al final
    están las instrucciones para dar o quitar acceso a un administrador.
 2. `blog.sql`: artículos y carpeta de imágenes del blog.
+3. `fotos.sql`: fotos (portada, cabina, comunidad), su carpeta y los textos de
+   la portada.
+
+## Portada
+
+- Mosaico de fotos en tres columnas inclinadas que se deslizan despacio (solo en
+  pantallas anchas; en el móvil queda quieto y tenue para ahorrar batería). Sin
+  fotos suficientes, se completa con tarjetas de diseño.
+- Titular editable con la parte destacada en dorado y un trazo que se dibuja al
+  cargar; indicador «En vivo ahora» real; cifras con oyentes en tiempo real.
+- Cinta dorada con frases editables y reproductor fijo siempre visible.
+- Todo el movimiento usa transform y opacity (lo resuelve la tarjeta gráfica),
+  empieza tras la carga, se detiene fuera de la vista y se desactiva si la
+  persona pidió reducir el movimiento.
 
 ## SEO
 
@@ -84,6 +101,7 @@ src/
 supabase/
   esquema.sql     Base de datos del panel
   blog.sql        Base de datos del blog
+  fotos.sql       Fotos y textos de la portada
 ```
 
 ## Variables de entorno
