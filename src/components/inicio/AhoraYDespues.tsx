@@ -1,7 +1,7 @@
 "use client";
 
 import { useReproductor } from "@/components/reproductor/ReproductorProvider";
-import { programacion } from "@/content/programacion";
+import { useProgramacion } from "@/components/datos/ProgramacionProvider";
 import { radio } from "@/content/radio";
 import { horaLegible, momentoEnZona, programaActual, programaSiguiente } from "@/lib/horario";
 import { useAhora } from "@/lib/reloj";
@@ -10,6 +10,7 @@ import estilos from "./inicio.module.css";
 export function AhoraYDespues() {
   const ahora = useAhora();
   const { estado, ahoraSuena } = useReproductor();
+  const programacion = useProgramacion();
 
   // Antes de llegar al navegador no sabemos la hora del oyente: reservamos el espacio.
   if (!ahora) return <div className={estilos.ahoraYDespues} />;

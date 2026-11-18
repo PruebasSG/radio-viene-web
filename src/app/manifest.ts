@@ -1,12 +1,12 @@
 import type { MetadataRoute } from "next";
-import { radio } from "@/content/radio";
+import { ajustesRespaldo, radio } from "@/content/radio";
 
 /** Permite instalar la web como una app en el móvil. */
 export default function manifest(): MetadataRoute.Manifest {
   return {
     name: `${radio.nombre} ${radio.frecuencia} ${radio.banda}`,
     short_name: radio.nombre,
-    description: radio.lema,
+    description: ajustesRespaldo.lema,
     lang: "es",
     start_url: "/",
     display: "standalone",

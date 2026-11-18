@@ -1,6 +1,6 @@
 "use client";
 
-import { programacion } from "@/content/programacion";
+import { useProgramacion } from "@/components/datos/ProgramacionProvider";
 import { radio } from "@/content/radio";
 import { momentoEnZona, programaActual } from "@/lib/horario";
 import { useAhora } from "@/lib/reloj";
@@ -15,6 +15,7 @@ import estilos from "./reproductor.module.css";
 export function BarraReproductor() {
   const { usado, estado, ahoraSuena } = useReproductor();
   const ahora = useAhora();
+  const programacion = useProgramacion();
 
   if (!usado) return null;
 

@@ -5,7 +5,7 @@ import { Dial } from "./Dial";
 import { MensajeSenal } from "./MensajeSenal";
 import estilos from "./inicio.module.css";
 
-export function Inicio() {
+export function Inicio({ lema }: { lema: string }) {
   return (
     <section id="inicio" className={estilos.inicio} aria-labelledby="titulo-inicio">
       <div className={`contenedor ${estilos.rejilla}`}>
@@ -17,7 +17,7 @@ export function Inicio() {
               {radio.frecuencia} {radio.banda}
             </span>
           </h1>
-          <p className={estilos.lema}>{radio.lema}</p>
+          <p className={estilos.lema}>{lema}</p>
         </div>
         <div className={estilos.control}>
           <BotonEscuchar />

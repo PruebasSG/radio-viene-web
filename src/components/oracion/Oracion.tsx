@@ -1,10 +1,10 @@
 import { IconoWhatsApp } from "@/components/iconos";
-import { mensajesWhatsApp, radio } from "@/content/radio";
+import { mensajesWhatsApp } from "@/content/radio";
 import { enlaceWhatsApp } from "@/lib/whatsapp";
 import estilos from "./oracion.module.css";
 
-export function Oracion() {
-  const enlace = enlaceWhatsApp(radio.whatsapp, mensajesWhatsApp.oracion);
+export function Oracion({ whatsapp }: { whatsapp: string }) {
+  const enlace = enlaceWhatsApp(whatsapp, mensajesWhatsApp.oracion);
 
   return (
     <section id="oracion" className={estilos.seccion} aria-labelledby="titulo-oracion">

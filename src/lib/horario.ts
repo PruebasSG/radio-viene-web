@@ -100,3 +100,14 @@ export function programaSiguiente(programas: readonly Programa[], momento: Momen
   const manana = DIAS[(DIAS.indexOf(momento.dia) + 1) % DIAS.length];
   return programasDelDia(programas, manana)[0] ?? null;
 }
+
+/** "Lunes a viernes", "Todos los días", "Lun, Mié, Vie"… */
+export function resumenDias(dias: readonly Dia[]): string {
+  const ordenados = DIAS.filter((d) => dias.includes(d));
+  const clave = ordenados.join(",");
+  if (ordenados.length === 7) return "Todos los días";
+  if (clave === "lunes,martes,miercoles,jueves,viernes") return "Lunes a viernes";
+  if (clave === "sabado,domingo") return "Fines de semana";
+  if (ordenados.length === 1) return NOMBRE_DIA[ordenados[0]].largo;
+  return ordenados.map((d) => NOMBRE_DIA[d].corto).join(", ");
+}

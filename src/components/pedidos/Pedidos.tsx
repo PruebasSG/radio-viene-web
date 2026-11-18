@@ -21,8 +21,8 @@ const OPCIONES = [
   },
 ];
 
-export function Pedidos() {
-  const disponible = enlaceWhatsApp(radio.whatsapp, "") !== null;
+export function Pedidos({ whatsapp }: { whatsapp: string }) {
+  const disponible = enlaceWhatsApp(whatsapp, "") !== null;
 
   return (
     <section id="pedidos" className={estilos.seccion} aria-labelledby="titulo-pedidos">
@@ -35,7 +35,7 @@ export function Pedidos() {
           </p>
           {disponible ? (
             <p className={estilos.numero}>
-              Nuestro WhatsApp: <strong>{numeroLegible(radio.whatsapp)}</strong>
+              Nuestro WhatsApp: <strong>{numeroLegible(whatsapp)}</strong>
             </p>
           ) : (
             <p className={estilos.numero}>Muy pronto podrás escribirnos por WhatsApp desde aquí.</p>
@@ -44,7 +44,7 @@ export function Pedidos() {
 
         <ul className={estilos.opciones}>
           {OPCIONES.map((opcion) => {
-            const enlace = enlaceWhatsApp(radio.whatsapp, opcion.mensaje);
+            const enlace = enlaceWhatsApp(whatsapp, opcion.mensaje);
             const contenido = (
               <>
                 <IconoWhatsApp className={estilos.icono} />

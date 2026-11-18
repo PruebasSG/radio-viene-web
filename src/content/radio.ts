@@ -1,8 +1,11 @@
 /**
  * DATOS DE LA RADIO
  *
- * Para cambiar un texto o un enlace de la web, edita este archivo y sube el
- * cambio a GitHub. Vercel publicará la versión nueva en uno o dos minutos.
+ * `radio` es la identidad fija de la emisora: cambia muy rara vez y vive en el código.
+ *
+ * `ajustesRespaldo` son los textos y contactos que se editan desde el panel
+ * (/admin/datos). Los valores de aquí solo se usan si la base de datos no
+ * responde, para que la web nunca quede vacía.
  */
 
 export type RedSocial = {
@@ -10,32 +13,37 @@ export type RedSocial = {
   url: string;
 };
 
+export type Ajustes = {
+  lema: string;
+  descripcion: string;
+  /** Solo dígitos, con código de país. Vacío = sin WhatsApp. */
+  whatsapp: string;
+  correo: string;
+  redes: RedSocial[];
+};
+
 export const radio = {
   nombre: "Radio Viene",
   frecuencia: "101.3",
   banda: "FM",
-  lema: "Música, Biblia y esperanza para cada día.",
-  descripcion:
-    "Somos una radio adventista del séptimo día. Te acompañamos con música cristiana, estudio de la Biblia y mensajes de esperanza para toda la familia.",
   ubicacion: "Venezuela",
 
   /** Zona horaria en la que se muestra la programación. */
   zonaHoraria: "America/Caracas",
   nombreZonaHoraria: "hora de Venezuela",
-
-  /**
-   * Número de WhatsApp con código de país, solo dígitos.
-   * Ejemplo: "584121234567". Mientras esté vacío, los botones de WhatsApp
-   * se muestran como "muy pronto".
-   */
-  whatsapp: "584126909569",
-
-  /** Correo de contacto. Déjalo vacío para no mostrarlo. */
-  correo: "",
-
-  /** Redes sociales. Ejemplo: { nombre: "Instagram", url: "https://instagram.com/radioviene" } */
-  redes: [] as RedSocial[],
 } as const;
+
+export const ajustesRespaldo: Ajustes = {
+  lema: "Música, Biblia y esperanza para cada día.",
+  descripcion:
+    "Somos una radio adventista del séptimo día. Te acompañamos con música cristiana, estudio de la Biblia y mensajes de esperanza para toda la familia.",
+  whatsapp: "584126909569",
+  correo: "",
+  redes: [],
+};
+
+/** Redes sociales que se pueden configurar desde el panel. */
+export const REDES_DISPONIBLES = ["Instagram", "Facebook", "YouTube", "TikTok"] as const;
 
 /** Mensajes que se escriben solos al abrir WhatsApp desde la web. */
 export const mensajesWhatsApp = {

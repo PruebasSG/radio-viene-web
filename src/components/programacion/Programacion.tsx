@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { programacion, type Dia } from "@/content/programacion";
+import { useProgramacion } from "@/components/datos/ProgramacionProvider";
+import type { Dia } from "@/content/programacion";
 import { radio } from "@/content/radio";
 import { DIAS, NOMBRE_DIA, estaAlAire, horaLegible, momentoEnZona, programasDelDia } from "@/lib/horario";
 import { useAhora } from "@/lib/reloj";
@@ -9,6 +10,7 @@ import estilos from "./programacion.module.css";
 
 export function Programacion() {
   const ahora = useAhora();
+  const programacion = useProgramacion();
   const momento = ahora ? momentoEnZona(ahora, radio.zonaHoraria) : null;
   const [elegido, setElegido] = useState<Dia | null>(null);
 

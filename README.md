@@ -1,39 +1,69 @@
 # Radio Viene 101.3 FM · Sitio web
 
 Web oficial de Radio Viene, radio adventista del séptimo día. Hecha con
-[Next.js](https://nextjs.org) y publicada en Vercel.
+[Next.js](https://nextjs.org), publicada en Vercel y con un panel
+administrativo conectado a [Supabase](https://supabase.com).
 
 ## Cómo actualizar el contenido
 
-Todo el contenido editable está en la carpeta `src/content/`. No hace falta
-tocar nada más para los cambios del día a día.
+**Desde el panel** (`/admin`), sin tocar código:
+
+- **Programación:** crear, editar, ocultar y eliminar programas. El panel avisa
+  si dos programas se cruzan de horario.
+- **Datos de la radio:** lema, texto de presentación, WhatsApp, correo y redes.
+
+Los cambios se ven en la web en unos segundos.
+
+**Desde el código**, solo para lo que cambia muy rara vez:
 
 | Archivo | Qué contiene |
 | --- | --- |
-| `src/content/radio.ts` | Nombre, lema, descripción, WhatsApp, correo y redes sociales |
-| `src/content/programacion.ts` | La programación semanal (días y horarios de cada programa) |
+| `src/content/radio.ts` | Nombre, frecuencia, ubicación, zona horaria y textos de respaldo |
+| `src/content/programacion.ts` | Programación de respaldo (si la base de datos no responde) |
 | `src/content/categorias.ts` | Las secciones del contenido a la carta |
 
-Para cambiar algo: abre el archivo en GitHub, pulsa el lápiz (✏️), edita el
-texto entre comillas y guarda con **Commit changes**. Vercel publica la nueva
-versión sola en uno o dos minutos.
+## Base de datos
+
+El archivo `supabase/esquema.sql` crea todas las tablas, las reglas de seguridad
+y los datos iniciales. Se ejecuta completo en Supabase → SQL Editor. Al final del
+archivo están las instrucciones para dar o quitar acceso a un administrador.
+
+## Seguridad
+
+- **Seguridad en la base de datos (RLS):** cualquiera puede leer la programación
+  visible; solo los usuarios de la tabla `administradores` pueden modificarla.
+  Aunque alguien saltara la web, la base de datos le negaría el acceso.
+- **Sin registro público:** los administradores se crean desde Supabase.
+- **El navegador nunca habla con Supabase:** el inicio de sesión y los cambios
+  pasan por el servidor de la web. La sesión vive en cookies seguras.
+- **Doble comprobación:** `src/proxy.ts` protege las rutas `/admin`, y además cada
+  página y cada acción vuelve a verificar que la persona es administradora.
+- **Validación en dos capas:** en el servidor (`src/lib/admin/validacion.ts`) y
+  con restricciones en la propia base de datos.
+- **La web nunca se cae por el panel:** si Supabase no responde, la web pública
+  usa el contenido de respaldo.
+- Cabeceras de seguridad en `next.config.ts` y versiones de dependencias fijadas.
 
 ## Estructura
 
 ```
 src/
-  app/            Páginas, diseño general, icono y API interna (/api/ahora)
-  components/     Cada sección de la web, con su propio archivo de estilos
-  config/         Direcciones técnicas de la emisora (stream y API)
-  content/        Contenido editable
-  lib/            Utilidades: horarios, WhatsApp, reloj y datos de AzuraCast
+  app/
+    (sitio)/      Web pública (con el reproductor)
+    admin/        Panel administrativo
+    api/ahora/    Estado de la emisora (consulta AzuraCast)
+  components/     Secciones de la web y del panel
+  config/         Direcciones de la emisora
+  content/        Identidad de la radio y contenido de respaldo
+  lib/            Datos, horarios, sesión y validación
+  proxy.ts        Protección de las rutas del panel
+supabase/
+  esquema.sql     Base de datos completa
 ```
 
 ## Variables de entorno
 
-Ver `.env.example`. Si no se definen, la web usa el servidor de pruebas
-(`radio.syncrochats.com`). Al mudar la radio a su servidor definitivo, basta con
-cambiar estas variables en Vercel; no hay que tocar el código.
+Ver `.env.example`.
 
 ## Trabajar en una computadora
 
@@ -46,14 +76,3 @@ npm run lint       # revisa el estilo del código
 npm run typecheck  # revisa los tipos
 npm run build      # compila como en producción
 ```
-
-## Seguridad
-
-- Las cabeceras de seguridad (incluida la política de contenido) están en
-  `next.config.ts`: el navegador solo carga recursos de la propia web y el audio
-  del servidor de la radio.
-- La web consulta AzuraCast desde su propio servidor (`/api/ahora`), nunca
-  desde el navegador del oyente, y solo reenvía los datos necesarios.
-- Las versiones de las dependencias están fijadas en `package.json`.
-- `npm audit` muestra un aviso en herramientas de desarrollo (ESLint). No forma
-  parte de la web publicada.

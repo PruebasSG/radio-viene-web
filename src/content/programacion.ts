@@ -1,30 +1,32 @@
 /**
- * PROGRAMACIÓN SEMANAL
+ * PROGRAMACIÓN DE RESPALDO
  *
- * ⚠️ Esta es una programación DE EJEMPLO. Reemplázala por la real.
+ * La programación real se edita desde el panel (/admin/programacion).
+ * Esta lista solo se muestra si la base de datos no responde, para que la
+ * web nunca quede vacía.
  *
- * Cada programa indica los días en que se emite y su horario en formato
- * de 24 horas ("06:00", "18:30"). Para un programa que termina a medianoche,
- * usa "24:00". Las horas que queden sin programa se muestran como
- * "Música continua".
+ * Horarios en formato de 24 horas ("06:00", "18:30"). "24:00" significa
+ * "hasta medianoche".
  */
 
 export type Dia = "lunes" | "martes" | "miercoles" | "jueves" | "viernes" | "sabado" | "domingo";
 
 export type Programa = {
+  /** Identificador en la base de datos (no existe en la lista de respaldo). */
+  id?: string;
   nombre: string;
   descripcion: string;
   dias: readonly Dia[];
   inicio: string;
   fin: string;
   /** Opcional: quién lo conduce. */
-  conductor?: string;
+  conductor?: string | null;
 };
 
 const entreSemana: Dia[] = ["lunes", "martes", "miercoles", "jueves", "viernes"];
 const todosLosDias: Dia[] = [...entreSemana, "sabado", "domingo"];
 
-export const programacion: Programa[] = [
+export const programacionRespaldo: Programa[] = [
   {
     nombre: "Música de madrugada",
     descripcion: "Himnos y alabanzas instrumentales para las horas de la noche.",

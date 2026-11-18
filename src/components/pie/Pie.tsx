@@ -1,9 +1,9 @@
-import { radio } from "@/content/radio";
+import { radio, type Ajustes } from "@/content/radio";
 import { enlaceWhatsApp, numeroLegible } from "@/lib/whatsapp";
 import estilos from "./pie.module.css";
 
-export function Pie() {
-  const whatsapp = enlaceWhatsApp(radio.whatsapp, "¡Hola, Radio Viene!");
+export function Pie({ ajustes }: { ajustes: Ajustes }) {
+  const whatsapp = enlaceWhatsApp(ajustes.whatsapp, "¡Hola, Radio Viene!");
   const anio = new Date().getFullYear();
 
   return (
@@ -13,7 +13,7 @@ export function Pie() {
           <p className={estilos.nombre}>
             {radio.nombre} <span>{radio.frecuencia} {radio.banda}</span>
           </p>
-          <p className={estilos.descripcion}>{radio.descripcion}</p>
+          <p className={estilos.descripcion}>{ajustes.descripcion}</p>
         </div>
 
         <div>
@@ -25,16 +25,16 @@ export function Pie() {
             {whatsapp && (
               <li>
                 <a href={whatsapp} target="_blank" rel="noopener noreferrer">
-                  WhatsApp {numeroLegible(radio.whatsapp)}
+                  WhatsApp {numeroLegible(ajustes.whatsapp)}
                 </a>
               </li>
             )}
-            {radio.correo && (
+            {ajustes.correo && (
               <li>
-                <a href={`mailto:${radio.correo}`}>{radio.correo}</a>
+                <a href={`mailto:${ajustes.correo}`}>{ajustes.correo}</a>
               </li>
             )}
-            {radio.redes.map((red) => (
+            {ajustes.redes.map((red) => (
               <li key={red.url}>
                 <a href={red.url} target="_blank" rel="noopener noreferrer">
                   {red.nombre}

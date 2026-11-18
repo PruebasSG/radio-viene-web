@@ -3,26 +3,22 @@ import "@fontsource-variable/literata/opsz.css";
 import "@fontsource-variable/figtree";
 import "./globals.css";
 
-import { Cabecera } from "@/components/cabecera/Cabecera";
-import { Pie } from "@/components/pie/Pie";
-import { BarraReproductor } from "@/components/reproductor/BarraReproductor";
-import { ReproductorProvider } from "@/components/reproductor/ReproductorProvider";
 import { SITE_URL } from "@/config/emisora";
-import { radio } from "@/content/radio";
+import { ajustesRespaldo, radio } from "@/content/radio";
 
 const titulo = `${radio.nombre} ${radio.frecuencia} ${radio.banda}`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: { default: titulo, template: `%s | ${titulo}` },
-  description: radio.descripcion,
+  description: ajustesRespaldo.descripcion,
   applicationName: radio.nombre,
   openGraph: {
     type: "website",
     locale: "es_VE",
     siteName: titulo,
     title: titulo,
-    description: radio.lema,
+    description: ajustesRespaldo.lema,
   },
 };
 
@@ -36,17 +32,7 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es">
-      <body>
-        <a className="saltar" href="#contenido">
-          Saltar al contenido
-        </a>
-        <ReproductorProvider>
-          <Cabecera />
-          <main id="contenido">{children}</main>
-          <Pie />
-          <BarraReproductor />
-        </ReproductorProvider>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
