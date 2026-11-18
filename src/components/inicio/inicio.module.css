@@ -1,0 +1,189 @@
+.inicio {
+  background: var(--azul-noche);
+  color: var(--sobre-oscuro);
+  padding-block: clamp(2.5rem, 7vw, 5rem) clamp(2.5rem, 6vw, 4rem);
+  overflow: hidden;
+}
+
+.rejilla {
+  display: grid;
+  gap: 2rem;
+  align-items: end;
+}
+
+@media (min-width: 52rem) {
+  .rejilla {
+    grid-template-columns: 1fr auto;
+    gap: 3rem;
+  }
+}
+
+.titulo {
+  font-size: clamp(3.6rem, 13vw, 8.5rem);
+  font-weight: 650;
+  line-height: 0.92;
+  letter-spacing: -0.035em;
+  font-variation-settings: "opsz" 72;
+}
+
+.lema {
+  margin-top: 1.25rem;
+  max-width: 28ch;
+  font-size: clamp(1.2rem, 2.4vw, 1.5rem);
+  color: var(--sobre-oscuro-suave);
+}
+
+.control {
+  display: grid;
+  gap: 0.9rem;
+  justify-items: start;
+  max-width: 22rem;
+}
+
+.mensaje {
+  min-height: 1.5em;
+  font-size: 0.98rem;
+  color: var(--dorado-claro);
+}
+
+.mensaje:empty {
+  min-height: 0;
+}
+
+/* ---------- Dial de sintonía ---------- */
+
+.dial {
+  margin-top: clamp(3rem, 7vw, 4.5rem);
+  padding-top: 3.25rem;
+}
+
+.escala {
+  position: relative;
+  height: 2.75rem;
+  border-bottom: 1px solid rgb(244 246 250 / 35%);
+  /* Rayas pequeñas cada 0,5 MHz */
+  background-image: linear-gradient(to right, rgb(244 246 250 / 28%) 1px, transparent 1px);
+  background-size: calc(100% / 40) 0.75rem;
+  background-position: left bottom;
+  background-repeat: repeat-x;
+}
+
+.marcas {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.marcas li {
+  position: absolute;
+  bottom: 0;
+  width: 1px;
+  height: 1.6rem;
+  background: rgb(244 246 250 / 55%);
+}
+
+.marcas span {
+  position: absolute;
+  top: calc(100% + 0.6rem);
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--sobre-oscuro-suave);
+}
+
+/* En pantallas chicas solo se rotulan 88, 92, 96, 100, 104 y 108 */
+@media (max-width: 40rem) {
+  .marcas li:nth-child(even) span {
+    display: none;
+  }
+}
+
+.aguja {
+  position: absolute;
+  top: -3.25rem;
+  bottom: -0.5rem;
+  left: var(--posicion);
+  width: 3px;
+  margin-left: -1px;
+  border-radius: 2px;
+  background: var(--dorado);
+  transition: box-shadow 400ms ease;
+  animation: sintonizar 1.9s cubic-bezier(0.2, 0.75, 0.15, 1) 0.25s both;
+}
+
+/* Al cargar, la aguja recorre el dial hasta detenerse en nuestra frecuencia */
+@keyframes sintonizar {
+  from {
+    left: 0%;
+  }
+}
+
+.dial[data-estado="sonando"] .aguja {
+  box-shadow:
+    0 0 14px 2px rgb(201 162 74 / 65%),
+    0 0 40px 6px rgb(201 162 74 / 25%);
+}
+
+.agujaFrecuencia {
+  position: absolute;
+  top: 0;
+  left: 0.75rem;
+  font-family: var(--fuente-titulos);
+  font-size: 1.6rem;
+  font-weight: 650;
+  line-height: 1;
+  color: var(--dorado);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.agujaFrecuencia small {
+  margin-left: 0.3rem;
+  font-family: var(--fuente-texto);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+/* ---------- Ahora y después ---------- */
+
+.ahoraYDespues {
+  display: grid;
+  gap: 1.5rem;
+  min-height: 5.5rem;
+  margin-top: 3.75rem;
+}
+
+@media (min-width: 40rem) {
+  .ahoraYDespues {
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+  }
+}
+
+.franja {
+  border-left: 2px solid var(--dorado);
+  padding-left: 1rem;
+}
+
+.franja + .franja {
+  border-left-color: rgb(244 246 250 / 25%);
+}
+
+.franjaEtiqueta {
+  font-size: 0.95rem;
+  color: var(--dorado-claro);
+}
+
+.franjaPrograma {
+  font-family: var(--fuente-titulos);
+  font-size: 1.45rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.franjaDetalle {
+  font-size: 0.98rem;
+  color: var(--sobre-oscuro-suave);
+}

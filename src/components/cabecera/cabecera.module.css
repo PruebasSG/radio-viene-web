@@ -1,0 +1,76 @@
+.cabecera {
+  /* En la app instalada del iPhone, deja libre la zona de la isla dinámica */
+  padding-top: env(safe-area-inset-top, 0px);
+  background: var(--azul-noche);
+  color: var(--sobre-oscuro);
+  border-bottom: 1px solid rgb(244 246 250 / 10%);
+}
+
+.interior {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem 2rem;
+  padding-block: 1rem;
+}
+
+/* En móvil el menú ocupa su propia línea y nunca es más ancho que la pantalla */
+.interior > nav {
+  flex: 1 1 100%;
+  min-width: 0;
+}
+
+@media (min-width: 52rem) {
+  .interior > nav {
+    flex: 0 1 auto;
+  }
+}
+
+.marca {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  text-decoration: none;
+}
+
+.marcaNombre {
+  font-family: var(--fuente-titulos);
+  font-size: 1.35rem;
+  font-weight: 650;
+}
+
+.marcaFrecuencia {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--dorado);
+}
+
+.menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.15rem 1.25rem;
+}
+
+@media (min-width: 52rem) {
+  .menu {
+    gap: 0.25rem 1.5rem;
+  }
+}
+
+.menu a {
+  display: block;
+  padding-block: 0.4rem;
+  font-size: 1rem;
+  white-space: nowrap;
+  text-decoration: none;
+  color: var(--sobre-oscuro-suave);
+  transition: color 150ms ease;
+}
+
+.menu a:hover {
+  color: var(--dorado-claro);
+}
