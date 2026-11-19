@@ -2,6 +2,7 @@
 
 import { useProgramacion } from "@/components/datos/ProgramacionProvider";
 import { Ecualizador } from "@/components/inicio/Ecualizador";
+import { IconoAuriculares } from "@/components/iconos";
 import { Logo } from "@/components/Logo";
 import { radio } from "@/content/radio";
 import { aMinutos, momentoEnZona, programaActual } from "@/lib/horario";
@@ -29,7 +30,7 @@ export function BarraReproductor() {
   const sonando = estado === "sonando";
   const enLinea = ahoraSuena?.enLinea === true;
   const cancion = ahoraSuena?.cancion;
-  const oyentes = enLinea ? (ahoraSuena?.oyentes ?? 0) : 0;
+  const oyentes = ahoraSuena?.oyentes ?? 0;
   const etiqueta = enLinea ? "En vivo" : "Al aire";
 
   const detalle =
@@ -66,7 +67,13 @@ export function BarraReproductor() {
           </div>
 
           <p className={estilos.barraOyentes}>
-            {oyentes > 0 && <>{oyentes === 1 ? "1 oyente" : `${oyentes} oyentes`}</>}
+            {oyentes > 0 && (
+              <>
+                <IconoAuriculares className={estilos.barraOyentesIcono} />
+                {oyentes}
+                <span className={estilos.barraOyentesTexto}> {oyentes === 1 ? "oyente" : "oyentes"}</span>
+              </>
+            )}
           </p>
         </div>
       </section>

@@ -138,7 +138,7 @@
 
 .barraInterior {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr) auto auto;
   align-items: center;
   gap: 1rem;
   min-height: var(--alto-barra);
@@ -194,13 +194,15 @@
   gap: 0.9rem;
 }
 
-.barraOndas {
+/* Ondas a los lados del botón: solo en pantallas anchas. Se escribe ".barraControl .barraOndas"
+   para que esta regla gane a la del ecualizador, que por sí sola las mostraría siempre. */
+.barraControl .barraOndas {
   display: none;
   height: 1.4rem;
 }
 
 @media (min-width: 48rem) {
-  .barraOndas {
+  .barraControl .barraOndas {
     display: inline-flex;
   }
 
@@ -210,16 +212,30 @@
   }
 }
 
+/* Oyentes: en el móvil, ícono y número a la derecha del botón; en pantallas anchas, con texto */
 .barraOyentes {
-  display: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
   justify-self: end;
   font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
   color: var(--sobre-oscuro-suave);
 }
 
+.barraOyentesIcono {
+  width: 1.05rem;
+  height: 1.05rem;
+  color: var(--dorado);
+}
+
+.barraOyentesTexto {
+  display: none;
+}
+
 @media (min-width: 48rem) {
-  .barraOyentes {
-    display: block;
+  .barraOyentesTexto {
+    display: inline;
   }
 }
 

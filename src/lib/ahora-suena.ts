@@ -32,12 +32,14 @@ export function desdeAzuraCast(datos: unknown): AhoraSuena {
   const raiz = objeto(datos);
   const cancion = objeto(objeto(raiz.now_playing).song);
   const titulo = texto(cancion.title) ?? texto(cancion.text);
-  const oyentes = objeto(raiz.listeners).current;
+  const oyentes = objeto(raiz.listeners);
+  // "total" es el campo oficial; "current" es su nombre antiguo, que AzuraCast podría retirar.
+  const cantidad = typeof oyentes.total === "number" ? oyentes.total : oyentes.current;
 
   return {
     enLinea: raiz.is_online === true,
     enVivo: objeto(raiz.live).is_live === true,
     cancion: titulo ? { titulo, artista: texto(cancion.artist) } : null,
-    oyentes: typeof oyentes === "number" ? oyentes : null,
+    oyentes: typeof cantidad === "number" && cantidad >= 0 ? cantidad : null,
   };
 }

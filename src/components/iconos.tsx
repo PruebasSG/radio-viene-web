@@ -102,3 +102,13 @@ export function IconoCasa({ className }: Props) {
     </svg>
   );
 }
+
+export function IconoAuriculares({ className }: Props) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M4 15v-3a8 8 0 0 1 16 0v3" />
+      <rect x="3" y="14" width="4.5" height="6.5" rx="1.5" />
+      <rect x="16.5" y="14" width="4.5" height="6.5" rx="1.5" />
+    </svg>
+  );
+}

@@ -7,7 +7,8 @@ import estilos from "./inicio.module.css";
 /** Datos rápidos bajo los botones. Los oyentes salen de AzuraCast en tiempo real. */
 export function Cifras({ totalProgramas }: { totalProgramas: number }) {
   const { ahoraSuena } = useReproductor();
-  const oyentes = ahoraSuena?.enLinea ? (ahoraSuena.oyentes ?? 0) : 0;
+  // Si hay gente escuchando, la señal está en línea: el número se muestra siempre que sea mayor que cero.
+  const oyentes = ahoraSuena?.oyentes ?? 0;
 
   const cifras = [
     { valor: "24/7", etiqueta: "al aire" },
