@@ -19,6 +19,11 @@ export const SIN_SENAL: AhoraSuena = {
   oyentes: null,
 };
 
+/** "Cuán grande es Él · Coro Radio Viene", o solo el título si no hay artista. */
+export function textoCancion(cancion: NonNullable<AhoraSuena["cancion"]>): string {
+  return [cancion.titulo, cancion.artista].filter(Boolean).join(" · ");
+}
+
 type Objeto = Record<string, unknown>;
 
 const objeto = (valor: unknown): Objeto =>

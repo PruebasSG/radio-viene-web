@@ -5,6 +5,7 @@ import { Ecualizador } from "@/components/inicio/Ecualizador";
 import { IconoAuriculares } from "@/components/iconos";
 import { Logo } from "@/components/Logo";
 import { radio } from "@/content/radio";
+import { textoCancion } from "@/lib/ahora-suena";
 import { aMinutos, momentoEnZona, programaActual } from "@/lib/horario";
 import { useAhora } from "@/lib/reloj";
 import { BotonEscuchar } from "./BotonEscuchar";
@@ -33,14 +34,23 @@ export function BarraReproductor() {
   const oyentes = ahoraSuena?.oyentes ?? 0;
   const etiqueta = enLinea ? "En vivo" : "Al aire";
 
-  const detalle =
-    estado === "error"
-      ? "Sin conexión con la señal en línea"
-      : estado === "conectando"
-        ? "Conectando…"
-        : sonando && cancion
-          ? [cancion.titulo, cancion.artista].filter(Boolean).join(" · ")
-          : `${etiqueta} · ${programa?.nombre ?? "Música continua"}`;
+  /**
+   * Qué se muestra, por orden de prioridad:
+   * 1. Problemas de conexión.
+   * 2. Si la persona está escuchando: el tema que suena (llega desde Jazler, vía BUTT y AzuraCast).
+   * 3. Si hay un programa cargado en el panel para esta hora: su nombre.
+   * 4. Si no hay programa: el tema que suena, para que la barra nunca quede genérica.
+   * 5. Si no hay ni programa ni tema: «Música continua».
+   */
+  function textoDetalle(): string {
+    if (estado === "error") return "Sin conexión con la señal en línea";
+    if (estado === "conectando") return "Conectando…";
+    if (sonando && cancion) return textoCancion(cancion);
+    if (programa) return `${etiqueta} · ${programa.nombre}`;
+    if (cancion) return `${etiqueta} · ${textoCancion(cancion)}`;
+    return `${etiqueta} · Música continua`;
+  }
+  const detalle = textoDetalle();
 
   return (
     <>
