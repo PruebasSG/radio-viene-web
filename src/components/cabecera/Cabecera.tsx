@@ -12,7 +12,7 @@ import estilos from "./cabecera.module.css";
 const ENLACES = [
   { href: "/#programacion", texto: "Programación" },
   { href: "/#pedidos", texto: "Pedidos y saludos" },
-  { href: "/#oracion", texto: "Oración" },
+  { href: "/oracion", texto: "Oración" },
   { href: "/blog", texto: "Blog" },
 ];
 

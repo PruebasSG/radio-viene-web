@@ -883,3 +883,89 @@ textarea.editorTexto {
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
+/* ---------- Moderación del muro de oración ---------- */
+
+.moderaciones {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1rem;
+}
+
+@media (min-width: 56rem) {
+  .moderaciones {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.moderacion {
+  display: grid;
+  align-content: start;
+  gap: 0.9rem;
+  padding: 1.15rem;
+  border: 1px solid var(--gris-linea);
+  border-left: 4px solid var(--dorado);
+  border-radius: var(--radio-grande);
+  background: var(--blanco);
+  transition: opacity 200ms ease;
+}
+
+.moderacion[data-estado="publicada"] {
+  border-left-color: #2f7d4f;
+}
+
+.moderacion[data-estado="archivada"] {
+  border-left-color: var(--gris-linea);
+}
+
+.moderacion[aria-busy="true"] {
+  opacity: 0.6;
+}
+
+.moderacionCabecera {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 0.92rem;
+  color: var(--gris);
+}
+
+.moderacionOraciones {
+  font-weight: 700;
+  color: var(--tinta);
+}
+
+/* Aviso numérico en el menú del panel */
+.contador {
+  display: inline-grid;
+  place-items: center;
+  min-width: 1.35rem;
+  height: 1.35rem;
+  margin-left: 0.35rem;
+  padding: 0 0.35rem;
+  border-radius: 999px;
+  background: var(--dorado);
+  color: var(--azul-noche);
+  font-size: 0.78rem;
+  font-weight: 700;
+  vertical-align: 0.1em;
+}
+
+.avisoOracion {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  padding: 1rem 1.25rem;
+  border-left: 4px solid var(--dorado);
+  border-radius: var(--radio-chico);
+  background: #fdf3dc;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.avisoOracion:hover {
+  background: #fbe9bf;
+}

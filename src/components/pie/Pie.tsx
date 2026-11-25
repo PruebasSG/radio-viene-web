@@ -8,7 +8,7 @@ import estilos from "./pie.module.css";
 const SECCIONES = [
   { href: "/#programacion", texto: "Programación" },
   { href: "/#pedidos", texto: "Pedidos y saludos" },
-  { href: "/#oracion", texto: "Oración" },
+  { href: "/oracion", texto: "Oración" },
   { href: "/blog", texto: "Blog" },
 ];
 

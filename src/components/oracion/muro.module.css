@@ -1,0 +1,300 @@
+/* ===================== Muro de oración ===================== */
+
+.cabecera {
+  padding-block: clamp(2.5rem, 7vw, 4.5rem) clamp(2rem, 5vw, 3rem);
+  background: var(--azul);
+  color: var(--sobre-oscuro);
+}
+
+.cabecera h1 {
+  font-size: clamp(2.6rem, 8vw, 4.5rem);
+  letter-spacing: -0.03em;
+  font-variation-settings: "opsz" 72;
+}
+
+.cabecera p {
+  margin-top: 0.85rem;
+  max-width: 46ch;
+  font-size: 1.2rem;
+  color: var(--sobre-oscuro-suave);
+}
+
+.versiculo {
+  margin-top: 1.25rem;
+  font-family: var(--fuente-titulos);
+  font-style: italic;
+  color: var(--dorado-claro);
+}
+
+.rejilla {
+  display: grid;
+  gap: 3rem;
+  padding-block: clamp(2.5rem, 6vw, 4rem) var(--seccion);
+}
+
+@media (min-width: 64rem) {
+  .rejilla {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.4fr);
+    align-items: start;
+  }
+
+  .columnaFormulario {
+    position: sticky;
+    top: 5.5rem;
+  }
+}
+
+.columnaFormulario h2,
+.columnaMuro h2 {
+  font-size: clamp(1.6rem, 3vw, 2rem);
+}
+
+.intro {
+  margin-top: 0.5rem;
+  color: var(--gris);
+}
+
+/* ---------- Formulario ---------- */
+
+.formulario {
+  display: grid;
+  gap: 1.15rem;
+  margin-top: 1.25rem;
+  padding: clamp(1.25rem, 3vw, 1.75rem);
+  border: 1px solid var(--gris-linea);
+  border-radius: var(--radio-grande);
+  background: var(--blanco);
+}
+
+.campo {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.etiqueta {
+  font-weight: 600;
+}
+
+.entrada {
+  width: 100%;
+  min-height: 3rem;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid #c6ccd5;
+  border-radius: var(--radio-chico);
+  background: var(--blanco);
+  font: inherit;
+  color: var(--tinta);
+}
+
+textarea.entrada {
+  resize: vertical;
+  line-height: 1.55;
+}
+
+.entrada:focus-visible {
+  outline: 3px solid var(--dorado);
+  outline-offset: 1px;
+  border-color: var(--azul);
+}
+
+.entrada[aria-invalid="true"] {
+  border-color: #b3261e;
+}
+
+.ayuda {
+  font-size: 0.92rem;
+  color: var(--gris);
+}
+
+.error {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #b3261e;
+}
+
+.casilla {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.casilla input {
+  flex: none;
+  width: 1.3rem;
+  height: 1.3rem;
+  margin-top: 0.15rem;
+  accent-color: var(--azul);
+}
+
+/* Campo trampa para robots: fuera de la vista y del teclado */
+.trampa {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.enviar {
+  justify-self: start;
+  min-height: 3.25rem;
+  padding: 0.75rem 1.6rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--dorado);
+  color: var(--azul-noche);
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 150ms ease;
+}
+
+.enviar:hover {
+  background: var(--dorado-claro);
+}
+
+.enviar:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+.gracias {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+  padding: clamp(1.25rem, 3vw, 1.75rem);
+  border-left: 4px solid var(--dorado);
+  border-radius: var(--radio-grande);
+  background: var(--azul-suave);
+}
+
+.graciasTitulo {
+  font-family: var(--fuente-titulos);
+  font-size: 1.35rem;
+  font-weight: 600;
+}
+
+.enlaceBoton {
+  justify-self: start;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-weight: 600;
+  color: var(--azul);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+/* ---------- Peticiones ---------- */
+
+.lista {
+  margin-top: 1.25rem;
+  columns: 1;
+  column-gap: 1.25rem;
+}
+
+@media (min-width: 44rem) {
+  .lista {
+    columns: 2;
+  }
+}
+
+.lista > * {
+  break-inside: avoid;
+  margin-bottom: 1.25rem;
+}
+
+.vacio {
+  margin-top: 1.25rem;
+  color: var(--gris);
+}
+
+.peticion {
+  display: grid;
+  gap: 1rem;
+  padding: 1.35rem 1.4rem;
+  border: 1px solid var(--gris-linea);
+  border-radius: var(--radio-grande);
+  background: var(--blanco);
+}
+
+.peticionTexto {
+  font-size: 1.08rem;
+  line-height: 1.6;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+.peticionPie {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.peticionAutor {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--gris);
+}
+
+/* ---------- Botón «Estoy orando» ---------- */
+
+.orar {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 2.6rem;
+  padding: 0.35rem 0.5rem 0.35rem 0.85rem;
+  border: 1px solid var(--gris-linea);
+  border-radius: 999px;
+  background: var(--blanco);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--tinta);
+  cursor: pointer;
+  transition:
+    border-color 150ms ease,
+    background-color 150ms ease;
+}
+
+.orar:hover:not([data-orando]) {
+  border-color: var(--dorado);
+}
+
+.orar[data-orando] {
+  border-color: var(--dorado);
+  background: #fdf3dc;
+  cursor: default;
+}
+
+.orar[data-orando] .orarManos {
+  animation: abrazo 500ms ease-out;
+}
+
+@keyframes abrazo {
+  40% {
+    transform: scale(1.35);
+  }
+}
+
+.orarManos {
+  display: inline-block;
+}
+
+.orarTotal {
+  min-width: 1.9rem;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  background: var(--gris-fondo);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.orar[data-orando] .orarTotal {
+  background: var(--dorado);
+  color: var(--azul-noche);
+}

@@ -1,9 +1,12 @@
-import { IconoWhatsApp } from "@/components/iconos";
+import Link from "next/link";
 import { mensajesWhatsApp } from "@/content/radio";
+import type { Peticion } from "@/lib/oracion";
 import { enlaceWhatsApp } from "@/lib/whatsapp";
+import { BotonOrar } from "./BotonOrar";
 import estilos from "./oracion.module.css";
 
-export function Oracion({ whatsapp }: { whatsapp: string }) {
+/** Sección de la portada: invita al muro de oración y muestra las últimas peticiones aprobadas. */
+export function Oracion({ whatsapp, peticiones }: { whatsapp: string; peticiones: Peticion[] }) {
   const enlace = enlaceWhatsApp(whatsapp, mensajesWhatsApp.oracion);
 
   return (
@@ -12,27 +15,46 @@ export function Oracion({ whatsapp }: { whatsapp: string }) {
         <div className={`${estilos.interior} revelar`}>
           <h2 id="titulo-oracion">¿Podemos orar por ti?</h2>
           <p className={estilos.texto}>
-            Comparte tu motivo de oración con nuestro equipo. Lo presentaremos a Dios con respeto y en confianza.
-            No hace falta que incluyas tu nombre.
+            Escribe tu petición en nuestro muro de oración, con tu nombre o de forma anónima. Nuestro equipo y
+            nuestra comunidad oraremos contigo.
           </p>
-          {enlace ? (
-            <a className={estilos.boton} href={enlace} target="_blank" rel="noopener noreferrer">
-              <IconoWhatsApp className={estilos.icono} />
-              Enviar mi petición de oración
-              <span className="solo-lectores"> (abre WhatsApp)</span>
-            </a>
-          ) : (
-            <p className={estilos.pronto}>Muy pronto podrás enviarnos tu petición desde aquí.</p>
+          <div className={estilos.botones}>
+            <Link className={estilos.boton} href="/oracion#escribir">
+              Escribir mi petición
+            </Link>
+            <Link className={estilos.botonSecundario} href="/oracion">
+              Ver el muro de oración
+            </Link>
+          </div>
+          {enlace && (
+            <p className={estilos.nota}>
+              ¿Prefieres hacerlo en privado?{" "}
+              <a href={enlace} target="_blank" rel="noopener noreferrer">
+                Escríbenos por WhatsApp
+              </a>
+              .
+            </p>
           )}
-          <p className={estilos.nota}>
-            Pronto podrás compartirla también en nuestro muro de oración, con tu nombre o de forma anónima.
-          </p>
         </div>
 
-        <figure className={`${estilos.versiculo} revelar`}>
-          <blockquote>Echa sobre Jehová tu carga, y él te sustentará.</blockquote>
-          <figcaption>Salmos 55:22</figcaption>
-        </figure>
+        {peticiones.length > 0 ? (
+          <ul className={`${estilos.ultimas} revelar`} aria-label="Últimas peticiones">
+            {peticiones.map((peticion) => (
+              <li key={peticion.id} className={estilos.ultima}>
+                <p className={estilos.ultimaTexto}>{peticion.texto}</p>
+                <div className={estilos.ultimaPie}>
+                  <span>{peticion.nombre ?? "Anónimo"}</span>
+                  <BotonOrar id={peticion.id} inicial={peticion.oraciones} />
+                </div>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <figure className={`${estilos.versiculo} revelar`}>
+            <blockquote>Echa sobre Jehová tu carga, y él te sustentará.</blockquote>
+            <figcaption>Salmos 55:22</figcaption>
+          </figure>
+        )}
       </div>
     </section>
   );
