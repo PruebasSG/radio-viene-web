@@ -29,8 +29,19 @@ type Objeto = Record<string, unknown>;
 const objeto = (valor: unknown): Objeto =>
   typeof valor === "object" && valor !== null ? (valor as Objeto) : {};
 
-const texto = (valor: unknown): string | null =>
-  typeof valor === "string" && valor.trim() !== "" ? valor.trim() : null;
+/**
+ * Prefijos que algunos programas de emisión (como Jazler) anteponen al tema:
+ * "Now On Air:", "Now Playing -", "On Air:", "Al aire:", "Sonando ahora:"…
+ * Solo se quitan si van seguidos de dos puntos, guion o barra, para no tocar
+ * títulos que contengan esas palabras (por ejemplo, "Al aire libre").
+ */
+const PREFIJO_DE_EMISION = /^\s*(now\s*on\s*air|now\s*playing|on\s*air|al\s*aire|sonando(\s*ahora)?|en\s*el\s*aire)\s*[:\-–—|]\s*/i;
+
+const texto = (valor: unknown): string | null => {
+  if (typeof valor !== "string") return null;
+  const limpio = valor.replace(PREFIJO_DE_EMISION, "").trim();
+  return limpio !== "" ? limpio : null;
+};
 
 /** Lee la respuesta de AzuraCast sin confiar en su forma: cualquier dato raro se ignora. */
 export function desdeAzuraCast(datos: unknown): AhoraSuena {
