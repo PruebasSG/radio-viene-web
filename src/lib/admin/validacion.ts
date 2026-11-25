@@ -151,3 +151,35 @@ export function esImagenReal(bytes: Uint8Array): boolean {
     empiezaCon(0x52, 0x49, 0x46, 0x46) && bytes[8] === 0x57 && bytes[9] === 0x45 && bytes[10] === 0x42 && bytes[11] === 0x50;
   return jpg || png || webp;
 }
+
+// ---------- Muro de oración ----------
+
+export const esquemaPeticion = z
+  .object({
+    anonima: z.boolean(),
+    nombre: z.string().trim().max(60, "Máximo 60 caracteres."),
+    texto: z
+      .string()
+      .trim()
+      .min(10, "Cuéntanos un poco más (al menos 10 caracteres).")
+      .max(600, "Máximo 600 caracteres."),
+    consentimiento: z.literal(true, { message: "Marca la casilla para continuar." }),
+  })
+  .superRefine((datos, contexto) => {
+    if (!datos.anonima && datos.nombre === "") {
+      contexto.addIssue({
+        code: "custom",
+        path: ["nombre"],
+        message: "Escribe tu nombre o marca «Prefiero que sea anónima».",
+      });
+    }
+  });
+
+export const esquemaModeracion = z.object({
+  nombre: z.string().trim().max(60, "Máximo 60 caracteres."),
+  texto: z
+    .string()
+    .trim()
+    .min(10, "Al menos 10 caracteres.")
+    .max(600, "Máximo 600 caracteres."),
+});

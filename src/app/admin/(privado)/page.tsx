@@ -7,10 +7,11 @@ export const metadata: Metadata = { title: "Inicio" };
 
 export default async function InicioPanel() {
   const { supabase, email } = await exigirAdmin();
-  const [{ data: programas }, { data: articulos }, { data: fotos }] = await Promise.all([
+  const [{ data: programas }, { data: articulos }, { data: fotos }, { count: porRevisar }] = await Promise.all([
     supabase.from("programas").select("activo"),
     supabase.from("articulos").select("estado"),
     supabase.from("fotos").select("seccion"),
+    supabase.from("peticiones").select("id", { count: "exact", head: true }).eq("estado", "pendiente"),
   ]);
   const fotosPortada = fotos?.filter((f) => f.seccion === "portada").length ?? 0;
 
@@ -27,6 +28,13 @@ export default async function InicioPanel() {
           <p className={estilos.intro}>Has entrado como {email}. ¿Qué quieres actualizar hoy?</p>
         </div>
       </div>
+
+      {(porRevisar ?? 0) > 0 && (
+        <Link href="/admin/oracion" className={estilos.avisoOracion}>
+          🙏 {porRevisar === 1 ? "Hay 1 petición de oración" : `Hay ${porRevisar} peticiones de oración`} por revisar
+          <span aria-hidden="true">→</span>
+        </Link>
+      )}
 
       <div className={estilos.accesos} data-cuatro>
         <Link href="/admin/programacion" className={estilos.acceso}>

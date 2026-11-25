@@ -4,12 +4,19 @@ import { Logo } from "@/components/Logo";
 import { NavPanel } from "@/components/admin/NavPanel";
 import estilos from "@/components/admin/panel.module.css";
 import { radio } from "@/content/radio";
+import { obtenerAdmin } from "@/lib/admin/sesion";
 
 /**
  * Estructura común de las páginas privadas del panel.
  * El acceso NO se comprueba aquí: lo hace cada página y cada acción.
  */
-export default function PanelLayout({ children }: { children: React.ReactNode }) {
+export default async function PanelLayout({ children }: { children: React.ReactNode }) {
+  // Solo para mostrar el aviso de peticiones por revisar en el menú.
+  const admin = await obtenerAdmin();
+  const { count } = admin
+    ? await admin.supabase.from("peticiones").select("id", { count: "exact", head: true }).eq("estado", "pendiente")
+    : { count: 0 };
+
   return (
     <>
       <header className={estilos.barra}>
@@ -29,7 +36,7 @@ export default function PanelLayout({ children }: { children: React.ReactNode })
               </button>
             </form>
           </div>
-          <NavPanel />
+          <NavPanel pendientes={count ?? 0} />
         </div>
       </header>
       <main className={estilos.contenido}>{children}</main>

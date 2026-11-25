@@ -10,6 +10,7 @@ import { radio, type Ajustes } from "@/content/radio";
 import { obtenerUltimosArticulos } from "@/lib/blog";
 import { obtenerAjustes, obtenerProgramacion } from "@/lib/datos";
 import { obtenerFotos } from "@/lib/fotos";
+import { obtenerPeticiones } from "@/lib/oracion";
 
 const nombreCompleto = `${radio.nombre} ${radio.frecuencia} ${radio.banda}`;
 
@@ -71,11 +72,12 @@ function datosEstructurados(ajustes: Ajustes) {
 }
 
 export default async function PaginaPrincipal() {
-  const [ajustes, articulos, fotos, programas] = await Promise.all([
+  const [ajustes, articulos, fotos, programas, peticiones] = await Promise.all([
     obtenerAjustes(),
     obtenerUltimosArticulos(3),
     obtenerFotos("portada"),
     obtenerProgramacion(),
+    obtenerPeticiones(3),
   ]);
   // Programas distintos (uno que se emite varios días cuenta una sola vez).
   const totalProgramas = new Set(programas.map((programa) => programa.nombre)).size;
@@ -88,7 +90,7 @@ export default async function PaginaPrincipal() {
       <Inicio ajustes={ajustes} fotos={fotos} totalProgramas={totalProgramas} />
       <Programacion />
       <Pedidos whatsapp={ajustes.whatsapp} />
-      <Oracion whatsapp={ajustes.whatsapp} />
+      <Oracion whatsapp={ajustes.whatsapp} peticiones={peticiones} />
       <UltimosArticulos articulos={articulos} />
       <ALaCarta />
     </>

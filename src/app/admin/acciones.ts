@@ -13,6 +13,7 @@ import {
   esquemaAjustes,
   esquemaArticulo,
   esquemaIngreso,
+  esquemaModeracion,
   esquemaPortada,
   esquemaPrograma,
 } from "@/lib/admin/validacion";
@@ -499,5 +500,60 @@ export async function eliminarFoto(id: string): Promise<ResultadoFoto> {
   if (rutas.length) await supabase.storage.from("fotos").remove(rutas);
 
   actualizarFotosWeb();
+  return { ok: true };
+}
+
+// ---------- Muro de oración ----------
+
+type EstadoPeticion = "pendiente" | "publicada" | "archivada";
+
+/**
+ * Guarda las correcciones de una petición (texto y nombre) y, si se indica,
+ * cambia su estado. Corregir sirve para quitar datos personales sin rechazarla.
+ * Un nombre vacío la deja anónima.
+ */
+export async function moderarPeticion(
+  id: string,
+  cambios: { texto?: string; nombre?: string; estado?: EstadoPeticion },
+): Promise<ResultadoFoto> {
+  const { supabase } = await exigirAdmin();
+  if (!esIdValido(id)) return { error: "No encontramos esa petición." };
+
+  const fila: Record<string, unknown> = {};
+  if (cambios.texto !== undefined || cambios.nombre !== undefined) {
+    const resultado = esquemaModeracion.safeParse({ texto: cambios.texto ?? "", nombre: cambios.nombre ?? "" });
+    if (!resultado.success) return { error: resultado.error.issues[0]?.message ?? "Revisa el texto." };
+    fila.texto = resultado.data.texto;
+    fila.nombre = resultado.data.nombre === "" ? null : resultado.data.nombre;
+  }
+  if (cambios.estado) {
+    if (!["pendiente", "publicada", "archivada"].includes(cambios.estado)) return { error: "Estado no válido." };
+    fila.estado = cambios.estado;
+    if (cambios.estado === "publicada") {
+      // La fecha de publicación se fija la primera vez; al volver a publicar se conserva.
+      const { data: actual } = await supabase.from("peticiones").select("publicada_en").eq("id", id).maybeSingle();
+      if (!actual?.publicada_en) fila.publicada_en = new Date().toISOString();
+    }
+  }
+  if (Object.keys(fila).length === 0) return { ok: true };
+
+  const { data, error } = await supabase.from("peticiones").update(fila).eq("id", id).select("id");
+  if (error || !data?.length) {
+    if (error) console.error("Error al moderar la petición:", error.message);
+    return { error: "No se pudo guardar. Inténtalo de nuevo." };
+  }
+
+  actualizarWeb();
+  return { ok: true };
+}
+
+export async function eliminarPeticion(id: string): Promise<ResultadoFoto> {
+  const { supabase } = await exigirAdmin();
+  if (!esIdValido(id)) return { error: "No encontramos esa petición." };
+
+  const { error } = await supabase.from("peticiones").delete().eq("id", id);
+  if (error) return { error: "No se pudo eliminar. Inténtalo de nuevo." };
+
+  actualizarWeb();
   return { ok: true };
 }
