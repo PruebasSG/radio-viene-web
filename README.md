@@ -14,6 +14,9 @@ administrativo conectado a [Supabase](https://supabase.com).
   vista previa del texto y vista previa de cómo se verán en Google.
 - **Fotos:** subir varias a la vez (se reducen solas a dos tamaños), describirlas,
   ordenarlas, ocultarlas o eliminarlas, por sección: portada, cabina y comunidad.
+- **Oración:** moderar el muro de oración: publicar (corrigiendo datos
+  personales si hace falta), archivar, volver a publicar o eliminar. El menú
+  avisa de cuántas peticiones esperan revisión.
 - **Datos de la radio:** titular de la portada, frases de la cinta, lema,
   texto de presentación, WhatsApp, correo y redes.
 
@@ -38,6 +41,8 @@ Supabase → SQL Editor:
 2. `blog.sql`: artículos y carpeta de imágenes del blog.
 3. `fotos.sql`: fotos (portada, cabina, comunidad), su carpeta y los textos de
    la portada.
+4. `oracion.sql`: muro de oración (peticiones, oraciones y sus dos funciones
+   públicas controladas).
 
 ## Portada
 
@@ -50,6 +55,18 @@ Supabase → SQL Editor:
 - Todo el movimiento usa transform y opacity (lo resuelve la tarjeta gráfica),
   empieza tras la carga, se detiene fuera de la vista y se desactiva si la
   persona pidió reducir el movimiento.
+
+## Muro de oración (`/oracion`)
+
+- Peticiones con nombre o anónimas: si es anónima, el nombre no se guarda.
+- Toda petición nace pendiente y solo se ve al publicarla desde el panel.
+- «Estoy orando»: una vez por persona y petición, controlado en el servidor
+  (el navegador además lo recuerda para mostrar «Orando contigo»).
+- Anti-spam: máximo 3 peticiones por hora por persona, campo trampa y tiempo
+  mínimo de envío.
+- Privacidad: no se guardan IPs, solo una huella cifrada con `ORACION_SECRETO`;
+  el público solo puede leer texto, nombre, contador y fecha; el muro no se
+  indexa en Google ni figura en el mapa del sitio.
 
 ## SEO
 
@@ -102,6 +119,7 @@ supabase/
   esquema.sql     Base de datos del panel
   blog.sql        Base de datos del blog
   fotos.sql       Fotos y textos de la portada
+  oracion.sql     Muro de oración
 ```
 
 ## Variables de entorno
