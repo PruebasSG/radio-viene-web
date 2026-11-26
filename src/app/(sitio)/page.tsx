@@ -5,8 +5,8 @@ import { Inicio } from "@/components/inicio/Inicio";
 import { Oracion } from "@/components/oracion/Oracion";
 import { Pedidos } from "@/components/pedidos/Pedidos";
 import { Programacion } from "@/components/programacion/Programacion";
-import { STREAM_URL, SITE_URL } from "@/config/emisora";
-import { radio, type Ajustes } from "@/content/radio";
+import { IMAGEN_COMPARTIR, STREAM_URL, SITE_URL } from "@/config/emisora";
+import { radio, seo, type Ajustes } from "@/content/radio";
 import { obtenerUltimosArticulos } from "@/lib/blog";
 import { obtenerAjustes, obtenerProgramacion } from "@/lib/datos";
 import { obtenerFotos } from "@/lib/fotos";
@@ -15,19 +15,22 @@ import { obtenerPeticiones } from "@/lib/oracion";
 const nombreCompleto = `${radio.nombre} ${radio.frecuencia} ${radio.banda}`;
 
 /**
- * Título y descripción de la portada en Google. El título incluye lo que la gente
- * busca ("radio cristiana", "adventista", "Venezuela"); la descripción es el texto
- * «Quiénes somos» que se edita desde el panel.
+ * Título y descripción de la portada en Google (se editan en src/content/radio.ts → seo).
+ * El nombre de la radio va primero: es como la gente la busca y la encuentra.
  */
-export async function generateMetadata(): Promise<Metadata> {
-  const ajustes = await obtenerAjustes();
-  return {
-    title: { absolute: `${nombreCompleto} · Radio cristiana adventista en ${radio.ubicacion}` },
-    description: ajustes.descripcion,
-    // Dirección oficial: Google une aquí radioviene.net, www y la dirección de Vercel.
-    alternates: { canonical: "/" },
-  };
-}
+export const metadata: Metadata = {
+  title: { absolute: `${nombreCompleto} · ${seo.tituloPortada}` },
+  description: seo.descripcion,
+  // Dirección oficial: Google une aquí radioviene.net, www y la dirección de Vercel.
+  alternates: { canonical: "/" },
+  // Al definir aquí los datos para redes, la imagen hay que indicarla también (si no, se pierde).
+  openGraph: {
+    title: `${nombreCompleto} · ${seo.tituloPortada}`,
+    description: seo.descripcion,
+    url: "/",
+    images: [IMAGEN_COMPARTIR],
+  },
+};
 
 /**
  * Datos estructurados: le dicen a Google, sin ambigüedad, que esta web es una
@@ -56,8 +59,16 @@ function datosEstructurados(ajustes: Ajustes) {
         slogan: ajustes.lema,
         logo: { "@type": "ImageObject", url: `${SITE_URL}/iconos/icono-512.png`, width: 512, height: 512 },
         image: `${SITE_URL}/opengraph-image.png`,
-        address: { "@type": "PostalAddress", addressCountry: "VE" },
-        areaServed: { "@type": "Country", name: radio.ubicacion },
+        address: {
+          "@type": "PostalAddress",
+          addressLocality: radio.ciudad,
+          addressRegion: radio.region,
+          addressCountry: "VE",
+        },
+        areaServed: [
+          { "@type": "City", name: radio.ciudad },
+          { "@type": "Country", name: radio.ubicacion },
+        ],
         ...(ajustes.whatsapp ? { telephone: `+${ajustes.whatsapp}` } : {}),
         ...(ajustes.correo ? { email: ajustes.correo } : {}),
         ...(ajustes.redes.length ? { sameAs: ajustes.redes.map((red) => red.url) } : {}),

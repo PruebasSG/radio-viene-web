@@ -3,7 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 
 import { SITE_URL } from "@/config/emisora";
-import { ajustesRespaldo, radio } from "@/content/radio";
+import { ajustesRespaldo, radio, seo } from "@/content/radio";
 
 const titulo = `${radio.nombre} ${radio.frecuencia} ${radio.banda}`;
 
@@ -31,7 +31,7 @@ const figtree = localFont({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: { default: titulo, template: `%s | ${titulo}` },
-  description: ajustesRespaldo.descripcion,
+  description: seo.descripcion,
   applicationName: radio.nombre,
   // Verificación opcional de Google Search Console y Bing con etiqueta.
   // (Recomendado: verificar por DNS, que no necesita estas variables.)

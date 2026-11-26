@@ -14,11 +14,13 @@ import {
   esquemaArticulo,
   esquemaIngreso,
   esquemaModeracion,
+  esquemaPagina,
   esquemaPortada,
   esquemaPrograma,
 } from "@/lib/admin/validacion";
 import { SECCIONES_FOTOS, type SeccionFoto } from "@/lib/fotos";
 import { aMinutos, horaLegible, NOMBRE_DIA } from "@/lib/horario";
+import { esSlugPagina } from "@/lib/paginas";
 import { SUPABASE_URL } from "@/lib/supabase/config";
 import { crearClienteServidor } from "@/lib/supabase/servidor";
 
@@ -556,4 +558,37 @@ export async function eliminarPeticion(id: string): Promise<ResultadoFoto> {
 
   actualizarWeb();
   return { ok: true };
+}
+
+// ---------- Páginas institucionales ----------
+
+export async function guardarPagina(
+  slug: string,
+  _: EstadoFormulario,
+  datos: FormData,
+): Promise<EstadoFormulario> {
+  const { supabase } = await exigirAdmin();
+  if (!esSlugPagina(slug)) return { mensaje: "Página no válida." };
+
+  const valores = {
+    titulo: texto(datos, "titulo"),
+    descripcion: texto(datos, "descripcion"),
+    contenido: texto(datos, "contenido"),
+  };
+  const resultado = esquemaPagina.safeParse(valores);
+  if (!resultado.success) {
+    return { mensaje: "Revisa los campos marcados.", errores: erroresPorCampo(resultado.error), valores };
+  }
+
+  const { data, error } = await supabase.from("paginas").update(resultado.data).eq("slug", slug).select("slug");
+  if (error || !data?.length) {
+    if (error) console.error("Error al guardar la página:", error.message);
+    return {
+      mensaje: "No se pudo guardar. Si es la primera vez, ejecuta el archivo paginas.sql en Supabase.",
+      valores,
+    };
+  }
+
+  actualizarWeb();
+  return { ok: true, mensaje: "Página guardada. Ya se ve en la web.", valores };
 }
