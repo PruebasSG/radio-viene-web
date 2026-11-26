@@ -17,6 +17,8 @@ administrativo conectado a [Supabase](https://supabase.com).
 - **Oración:** moderar el muro de oración: publicar (corrigiendo datos
   personales si hace falta), archivar, volver a publicar o eliminar. El menú
   avisa de cuántas peticiones esperan revisión.
+- **Páginas:** los textos de Quiénes somos, Nuestras creencias y Contacto
+  (con su descripción para Google). Mientras no se editen, muestran un borrador.
 - **Datos de la radio:** titular de la portada, frases de la cinta, lema,
   texto de presentación, WhatsApp, correo y redes.
 
@@ -26,7 +28,8 @@ Los cambios se ven en la web en unos segundos.
 
 | Archivo | Qué contiene |
 | --- | --- |
-| `src/content/radio.ts` | Nombre, frecuencia, ubicación, zona horaria y textos de respaldo |
+| `src/content/radio.ts` | Nombre, frecuencia, ciudad, zona horaria, título y descripción para Google (`seo`) y textos de respaldo |
+| `src/content/paginas.ts` | Borradores de Quiénes somos, Nuestras creencias y Contacto |
 | `src/content/programacion.ts` | Programación de respaldo (si la base de datos no responde) |
 | `src/content/categorias.ts` | Las secciones del contenido a la carta |
 | `src/content/blog.ts` | Las categorías del blog |
@@ -43,6 +46,8 @@ Supabase → SQL Editor:
    la portada.
 4. `oracion.sql`: muro de oración (peticiones, oraciones y sus dos funciones
    públicas controladas).
+5. `paginas.sql`: páginas institucionales (Quiénes somos, Nuestras creencias y
+   Contacto).
 
 ## Portada
 
@@ -70,9 +75,11 @@ Supabase → SQL Editor:
 
 ## SEO
 
-- **Portada:** título pensado para búsquedas, descripción editable desde el panel
-  («Quiénes somos») y datos estructurados `WebSite` + `RadioStation` (nombre del
-  sitio, logo, país, redes y señal en vivo).
+- **Portada:** título y descripción pensados para búsquedas locales (en
+  `src/content/radio.ts` → `seo`) y datos estructurados `WebSite` +
+  `RadioStation` (nombre del sitio, logo, Mérida, Venezuela, redes y señal en vivo).
+- **Páginas institucionales:** cada una con su título, descripción y dirección
+  canónica; Contacto se marca como `ContactPage` para Google.
 - **Artículos:** título y descripción propios, dirección canónica, imagen para
   compartir (o la de la radio si no tienen portada) y datos `BlogPosting`.
 - **Dirección oficial:** `NEXT_PUBLIC_SITE_URL` (https://www.radioviene.net) se
@@ -120,6 +127,7 @@ supabase/
   blog.sql        Base de datos del blog
   fotos.sql       Fotos y textos de la portada
   oracion.sql     Muro de oración
+  paginas.sql     Páginas institucionales
 ```
 
 ## Variables de entorno
