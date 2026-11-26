@@ -183,3 +183,11 @@ export const esquemaModeracion = z.object({
     .min(10, "Al menos 10 caracteres.")
     .max(600, "Máximo 600 caracteres."),
 });
+
+// ---------- Páginas institucionales ----------
+
+export const esquemaPagina = z.object({
+  titulo: z.string().trim().min(1, "Escribe el título.").max(80, "Máximo 80 caracteres."),
+  descripcion: z.string().trim().max(200, "Máximo 200 caracteres."),
+  contenido: z.string().trim().min(1, "La página no puede quedar vacía.").max(50_000, "El texto es demasiado largo."),
+});

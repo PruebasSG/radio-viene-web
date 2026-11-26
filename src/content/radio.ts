@@ -32,11 +32,27 @@ export const radio = {
   frecuencia: "101.3",
   banda: "FM",
   ubicacion: "Venezuela",
+  ciudad: "Mérida",
+  /** Estado (región) de Venezuela, para los datos de Google. */
+  region: "Mérida",
 
   /** Zona horaria en la que se muestra la programación. */
   zonaHoraria: "America/Caracas",
   nombreZonaHoraria: "hora de Venezuela",
 } as const;
+
+/**
+ * Textos para Google: título y descripción de la portada.
+ * El título se muestra como "Radio Viene 101.3 FM · {tituloPortada}".
+ */
+export const seo = {
+  tituloPortada: "Radio Adventista en Mérida-Venezuela",
+  descripcion:
+    "Escucha Radio Viene 101.3 FM en vivo desde Mérida, Venezuela: música cristiana, estudio de la Biblia, oración y esperanza las 24 horas.",
+} as const;
+
+/** "Mérida, Venezuela" */
+export const lugar = `${radio.ciudad}, ${radio.ubicacion}`;
 
 export const ajustesRespaldo: Ajustes = {
   titular: "Esperanza que",
