@@ -1,14 +1,20 @@
 import Link from "next/link";
 import { Logo } from "@/components/Logo";
 import { BotonEscuchar } from "@/components/reproductor/BotonEscuchar";
-import { radio, type Ajustes } from "@/content/radio";
+import { lugar, radio, type Ajustes } from "@/content/radio";
 import { enlaceWhatsApp, numeroLegible } from "@/lib/whatsapp";
 import estilos from "./pie.module.css";
 
-const SECCIONES = [
+const LA_RADIO = [
+  { href: "/quienes-somos", texto: "Quiénes somos" },
+  { href: "/nuestras-creencias", texto: "Nuestras creencias" },
+  { href: "/contacto", texto: "Contacto" },
+];
+
+const PARTICIPA = [
   { href: "/#programacion", texto: "Programación" },
   { href: "/#pedidos", texto: "Pedidos y saludos" },
-  { href: "/oracion", texto: "Oración" },
+  { href: "/oracion", texto: "Muro de oración" },
   { href: "/blog", texto: "Blog" },
 ];
 
@@ -32,12 +38,25 @@ export function Pie({ ajustes }: { ajustes: Ajustes }) {
           </div>
         </div>
 
-        <nav aria-labelledby="pie-secciones">
-          <h2 id="pie-secciones" className={estilos.subtitulo}>
-            Secciones
+        <nav aria-labelledby="pie-radio">
+          <h2 id="pie-radio" className={estilos.subtitulo}>
+            La radio
           </h2>
           <ul className={estilos.lista}>
-            {SECCIONES.map((seccion) => (
+            {LA_RADIO.map((seccion) => (
+              <li key={seccion.href}>
+                <Link href={seccion.href}>{seccion.texto}</Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        <nav aria-labelledby="pie-participa">
+          <h2 id="pie-participa" className={estilos.subtitulo}>
+            Escucha y participa
+          </h2>
+          <ul className={estilos.lista}>
+            {PARTICIPA.map((seccion) => (
               <li key={seccion.href}>
                 <Link href={seccion.href}>{seccion.texto}</Link>
               </li>
@@ -49,7 +68,7 @@ export function Pie({ ajustes }: { ajustes: Ajustes }) {
           <h2 className={estilos.subtitulo}>Contacto</h2>
           <ul className={estilos.lista}>
             <li>
-              {radio.frecuencia} {radio.banda}, {radio.ubicacion}
+              {radio.frecuencia} {radio.banda}, {lugar}
             </li>
             {whatsapp && (
               <li>

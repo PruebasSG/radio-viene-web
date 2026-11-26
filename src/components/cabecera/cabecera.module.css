@@ -223,6 +223,25 @@
 
 /* ---------- Escritorio ---------- */
 
+/* En anchos intermedios la cabecera se compacta: los cinco enlaces y el botón caben sin chocar */
+@media (min-width: 60rem) and (max-width: 74.99rem) {
+  .marcaFrecuencia {
+    display: none;
+  }
+
+  .interior {
+    gap: 1rem 1.25rem;
+  }
+
+  .menu {
+    gap: 0.25rem 1.1rem;
+  }
+
+  .menu a {
+    font-size: 0.95rem;
+  }
+}
+
 @media (min-width: 60rem) {
   .navEscritorio {
     display: block;

@@ -11,9 +11,10 @@ import estilos from "./cabecera.module.css";
 // Con "/" delante, los enlaces funcionan también desde las páginas del blog.
 const ENLACES = [
   { href: "/#programacion", texto: "Programación" },
-  { href: "/#pedidos", texto: "Pedidos y saludos" },
   { href: "/oracion", texto: "Oración" },
   { href: "/blog", texto: "Blog" },
+  { href: "/quienes-somos", texto: "Quiénes somos" },
+  { href: "/contacto", texto: "Contacto" },
 ];
 
 /**

@@ -10,6 +10,7 @@ const SECCIONES = [
   { href: "/admin/blog", texto: "Blog" },
   { href: "/admin/fotos", texto: "Fotos" },
   { href: "/admin/oracion", texto: "Oración" },
+  { href: "/admin/paginas", texto: "Páginas" },
   { href: "/admin/datos", texto: "Datos de la radio" },
 ];
 

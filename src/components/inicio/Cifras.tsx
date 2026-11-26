@@ -14,7 +14,7 @@ export function Cifras({ totalProgramas }: { totalProgramas: number }) {
     { valor: "24/7", etiqueta: "al aire" },
     oyentes > 0
       ? { valor: String(oyentes), etiqueta: "escuchando ahora" }
-      : { valor: radio.frecuencia, etiqueta: `${radio.banda} en ${radio.ubicacion}` },
+      : { valor: radio.frecuencia, etiqueta: `${radio.banda} en ${radio.ciudad}` },
     ...(totalProgramas > 0 ? [{ valor: String(totalProgramas), etiqueta: "programas" }] : []),
   ];
 

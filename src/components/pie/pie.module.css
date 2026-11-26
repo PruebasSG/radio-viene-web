@@ -22,8 +22,9 @@
 
 @media (min-width: 64rem) {
   .rejilla {
-    grid-template-columns: 2fr repeat(3, minmax(0, 1fr));
-    gap: 3rem;
+    /* La marca ocupa más; el resto de columnas (menús, contacto, redes) se reparten el espacio */
+    grid-template-columns: minmax(16rem, 1.6fr) repeat(auto-fit, minmax(9rem, 1fr));
+    gap: 2.5rem;
   }
 
   .marca {

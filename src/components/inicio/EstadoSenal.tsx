@@ -1,7 +1,7 @@
 "use client";
 
 import { useReproductor } from "@/components/reproductor/ReproductorProvider";
-import { radio } from "@/content/radio";
+import { lugar, radio } from "@/content/radio";
 import estilos from "./inicio.module.css";
 
 /** «En vivo ahora» solo cuando la señal en línea realmente está emitiendo. */
@@ -18,7 +18,7 @@ export function EstadoSenal() {
         {radio.frecuencia} {radio.banda}
       </strong>
       <span aria-hidden="true">·</span>
-      <span>{radio.ubicacion}</span>
+      <span>{lugar}</span>
     </p>
   );
 }
